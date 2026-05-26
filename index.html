@@ -84,36 +84,45 @@ a{color:inherit;text-decoration:none}
 /* ── HERO ── */
 .hero{
   position:relative;
-  min-height:92vh;
+  min-height:auto;
   display:flex;align-items:center;
-  padding:80px 28px;
+  padding:96px 28px 88px;
   overflow:hidden;
-  background:linear-gradient(135deg,#000 0%,#1a1a1a 55%,#2a0608 100%);
+  background:
+    radial-gradient(900px 600px at 78% 18%, rgba(215,25,32,.28), transparent 60%),
+    radial-gradient(700px 500px at 10% 90%, rgba(215,25,32,.10), transparent 55%),
+    linear-gradient(160deg,#0a0a0a 0%, #141414 60%, #050505 100%);
+}
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(80% 70% at 50% 40%,#000,transparent 85%);
+          mask-image:radial-gradient(80% 70% at 50% 40%,#000,transparent 85%);
 }
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.32}
-.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 20% 30%,rgba(0,0,0,.2),rgba(0,0,0,.85));z-index:1}
-.hero-inner{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;width:100%}
-.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.15));z-index:1}
+.hero-inner{position:relative;z-index:2;max-width:1040px;margin:0 auto;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center}
+.hero-text{max-width:780px}
+.hero-text .eyebrow{margin-bottom:18px}
 
 .eyebrow{
   display:inline-block;
-  font-family:'Montserrat',sans-serif;font-weight:800;font-size:13px;
-  letter-spacing:.28em;text-transform:uppercase;color:var(--red2);
-  margin-bottom:22px;
-  border-left:4px solid var(--red);padding-left:14px;
+  font-family:'Montserrat',sans-serif;font-weight:800;font-size:12px;
+  letter-spacing:.26em;text-transform:uppercase;color:#fff;
+  background:var(--red);padding:7px 16px;border-radius:50px;
+  box-shadow:0 8px 24px rgba(215,25,32,.35);
 }
-.hero h1{font-size:clamp(40px,6vw,76px);text-transform:uppercase}
-.hero h1 .accent{color:var(--red);display:block}
+.hero h1{font-size:clamp(44px,6.5vw,82px);text-transform:uppercase;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.5);font-weight:900}
+.hero h1 .lead{display:block;color:#fff;opacity:.92;font-size:.52em;letter-spacing:.02em;font-weight:800}
+.hero h1 .accent{color:var(--red);display:block;text-shadow:0 4px 40px rgba(215,25,32,.45)}
 .hero-sub{
-  font-family:'Montserrat',sans-serif;font-weight:700;
-  font-size:clamp(16px,2vw,21px);
-  color:var(--light);margin-top:18px;letter-spacing:.01em;
+  font-family:'Montserrat',sans-serif;font-weight:600;
+  font-size:clamp(16px,1.6vw,20px);
+  color:#d6d6d6;margin:18px auto 0;letter-spacing:.01em;max-width:560px;
 }
-.hero-points{list-style:none;margin:30px 0 34px;display:grid;gap:12px}
-.hero-points li{display:flex;align-items:center;gap:12px;font-weight:500;font-size:16px;color:#e8e8e8}
-.hero-points li::before{content:"✓";display:grid;place-items:center;flex:0 0 24px;height:24px;width:24px;background:var(--red);color:#fff;border-radius:50%;font-size:13px;font-weight:900}
 
-.cta-row{display:flex;flex-wrap:wrap;gap:14px}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:28px}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
   font-family:'Montserrat',sans-serif;font-weight:800;font-size:15px;
@@ -127,23 +136,36 @@ a{color:inherit;text-decoration:none}
 .btn-ghost:hover{background:#fff;color:#000}
 
 /* offer tag in hero */
-.hero-offer{
-  margin-top:26px;display:inline-flex;align-items:center;gap:14px;
-  background:rgba(215,25,32,.12);border:1px dashed var(--red);
-  padding:12px 20px;border-radius:8px;
-}
-.hero-offer .big{font-family:'Montserrat',sans-serif;font-weight:900;font-size:26px;color:var(--red2);line-height:1}
-.hero-offer .small{font-size:13px;color:#ddd;font-weight:500;text-transform:uppercase;letter-spacing:.06em}
 
-.hero-media{position:relative}
-.hero-media img{width:100%;border-radius:14px;border:1px solid #333;box-shadow:0 30px 80px rgba(0,0,0,.6)}
-.hero-media .badge{
-  position:absolute;bottom:-16px;right:-10px;
-  background:#fff;color:#000;font-family:'Montserrat',sans-serif;font-weight:900;
-  font-size:13px;letter-spacing:.05em;text-transform:uppercase;
-  padding:12px 18px;border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.4);
+.hero-showcase{
+  position:relative;margin:42px auto 0;width:100%;max-width:880px;
+  border-radius:18px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 50px 120px rgba(0,0,0,.75), 0 0 0 6px rgba(255,255,255,.04), 0 0 90px rgba(215,25,32,.18);
+  animation:rise .8s ease both .15s;
 }
-.hero-media .badge span{color:var(--red)}
+.hero-showcase img{width:100%;display:block}
+.show-tag{
+  position:absolute;top:14px;left:14px;z-index:3;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(4px);
+  color:#fff;font-family:'Montserrat',sans-serif;font-weight:600;font-size:12px;
+  letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:50px;
+  border:1px solid rgba(255,255,255,.18);
+}
+.show-tag strong{color:#ff5a60}
+.show-offer{
+  position:absolute;bottom:14px;right:14px;z-index:3;text-align:right;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));
+  padding:12px 18px;border-radius:12px;box-shadow:0 14px 36px rgba(215,25,32,.5);
+}
+.so-save{display:block;font-family:'Montserrat',sans-serif;font-weight:900;font-size:26px;color:#fff;line-height:1}
+.so-note{display:block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#ffd9da;margin-top:3px}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+/* hero trust points row under the image */
+.hero-points{list-style:none;display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;margin:30px auto 0;padding:0}
+.hero-points li{display:flex;align-items:center;gap:9px;font-weight:500;font-size:15px;color:#e8e8e8}
+.hero-points li::before{content:"✓";display:grid;place-items:center;flex:0 0 22px;height:22px;width:22px;background:var(--red);color:#fff;border-radius:50%;font-size:12px;font-weight:900}
 
 /* ── SECTION WRAP ── */
 .section{padding:88px 28px}
@@ -271,8 +293,8 @@ a{color:inherit;text-decoration:none}
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
-  .hero-grid{grid-template-columns:1fr;gap:36px}
-  .hero-media{order:-1}
+  .so-save{font-size:20px}
+  .hero-points{gap:8px 18px}
   .steps,.why-grid,.reviews{grid-template-columns:1fr}
   .ba-grid{grid-template-columns:1fr}
   .spec{grid-template-columns:1fr;gap:26px}
@@ -312,32 +334,32 @@ a{color:inherit;text-decoration:none}
     <source src="/video/hero.mp4" type="video/mp4">
   </video>
   <div class="hero-inner">
-    <div class="hero-grid">
-      <div>
-        <span class="eyebrow">Canada's Premier Hair Tattoo Clinic</span>
-        <h1>Say Goodbye<br>to <span class="accent">Balding</span></h1>
-        <p class="hero-sub">Ultra-realistic, non-surgical Scalp Micropigmentation — Toronto &amp; the GTA.</p>
-        <ul class="hero-points">
-          <li>Ultra-realistic hairline results</li>
-          <li>Non-surgical — no scars, no downtime</li>
-          <li>Fully customized hairline design</li>
-          <li>Over 10 years serving Toronto &amp; GTA</li>
-        </ul>
-        <div class="cta-row">
-          <a href="#consult-form" class="btn btn-red">Book Free Consultation</a>
-          <a href="tel:+16474929093" class="btn btn-ghost" onclick="trackCall('hero')">📞 (647) 492-9093</a>
-        </div>
-        <div class="hero-offer">
-          <div class="big">SAVE $400</div>
-          <div class="small">Victoria Day Special · Limited Time</div>
-        </div>
-      </div>
-      <div class="hero-media">
-        <!-- Replace with a strong before/after or result shot -->
-        <img src="/img/scalp%20micropigmentation%20regrets%202.jpg" alt="Scalp micropigmentation result" onerror="this.style.display='none'">
-        <div class="badge">5★ <span>Toronto SMP</span> Clinic</div>
+    <div class="hero-text">
+      <span class="eyebrow">Canada's Premier Hair Tattoo Clinic</span>
+      <h1><span class="lead">Say Goodbye To</span><span class="accent">Balding</span></h1>
+      <p class="hero-sub">Ultra-realistic, non-surgical Scalp Micropigmentation — Toronto &amp; the GTA.</p>
+      <div class="cta-row">
+        <a href="#consult-form" class="btn btn-red">Book Free Consultation</a>
+        <a href="tel:+16474929093" class="btn btn-ghost" onclick="trackCall('hero')">📞 (647) 492-9093</a>
       </div>
     </div>
+
+    <!-- IMAGE SHOWCASE — swap src for your strongest before/after -->
+    <figure class="hero-showcase">
+      <span class="show-tag">Real Client Result &nbsp;·&nbsp; <strong>Before → After</strong></span>
+      <img src="/img/scalp%20micropigmentation%20regrets%202.jpg" alt="Scalp micropigmentation before and after result">
+      <div class="show-offer">
+        <span class="so-save">SAVE $400</span>
+        <span class="so-note">Victoria Day Special · Limited Time</span>
+      </div>
+    </figure>
+
+    <ul class="hero-points">
+      <li>Ultra-realistic hairline results</li>
+      <li>Non-surgical — no scars, no downtime</li>
+      <li>Fully customized design</li>
+      <li>10+ years serving the GTA</li>
+    </ul>
   </div>
 </section>
 
