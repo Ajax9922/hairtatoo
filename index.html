@@ -92,9 +92,10 @@ a{color:inherit;text-decoration:none}
   padding:96px 28px 88px;
   overflow:hidden;
   background:
-    radial-gradient(900px 600px at 78% 18%, rgba(215,25,32,.28), transparent 60%),
-    radial-gradient(700px 500px at 10% 90%, rgba(215,25,32,.10), transparent 55%),
-    linear-gradient(160deg,#0a0a0a 0%, #141414 60%, #050505 100%);
+    linear-gradient(180deg, rgba(0,0,0,.72), rgba(0,0,0,.82)),
+    radial-gradient(700px 500px at 80% 15%, rgba(215,25,32,.20), transparent 60%),
+    url('/img/transformation-3stage.jpg') center/cover no-repeat,
+    #0a0a0a;
 }
 .hero::before{
   content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -152,26 +153,28 @@ a{color:inherit;text-decoration:none}
 .hero-showcase img,.hero-showcase video{width:100%;display:block}
 .hero-video-feat{aspect-ratio:16/9;object-fit:cover;background:#000}
 .show-tag{
-  position:absolute;top:14px;left:14px;z-index:3;
-  background:rgba(0,0,0,.72);backdrop-filter:blur(4px);
-  color:#fff;font-family:'Montserrat',sans-serif;font-weight:600;font-size:12px;
-  letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:50px;
-  border:1px solid rgba(255,255,255,.18);
+  position:absolute;top:12px;left:12px;z-index:3;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  color:#fff;font-family:'Montserrat',sans-serif;font-weight:600;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:50px;
+  border:1px solid rgba(255,255,255,.16);
 }
 .show-tag strong{color:#ff5a60}
-.show-offer{
-  position:absolute;top:14px;right:14px;z-index:3;text-align:right;
-  background:linear-gradient(135deg,var(--red),var(--red-dark));
-  padding:12px 18px;border-radius:12px;box-shadow:0 14px 36px rgba(215,25,32,.5);
+.vid-mute{
+  position:absolute;top:12px;right:12px;z-index:4;cursor:pointer;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);color:#fff;
+  border:1px solid rgba(255,255,255,.2);border-radius:50px;
+  font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;
+  padding:7px 13px;display:inline-flex;align-items:center;gap:6px;
+  transition:background .2s;
 }
-.so-save{display:block;font-family:'Montserrat',sans-serif;font-weight:900;font-size:26px;color:#fff;line-height:1}
-.so-note{display:block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#ffd9da;margin-top:3px}
+.vid-mute:hover{background:var(--red)}
 @keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 
 /* hero trust points row under the image */
-.hero-points{list-style:none;display:flex;flex-wrap:wrap;gap:10px 26px;justify-content:center;margin:30px auto 0;padding:0}
-.hero-points li{display:flex;align-items:center;gap:9px;font-weight:500;font-size:15px;color:#e8e8e8}
-.hero-points li::before{content:"✓";display:grid;place-items:center;flex:0 0 22px;height:22px;width:22px;background:var(--red);color:#fff;border-radius:50%;font-size:12px;font-weight:900}
+.hero-points{list-style:none;display:flex;flex-wrap:nowrap;gap:8px 18px;justify-content:center;align-items:center;margin:26px auto 0;padding:0;max-width:100%}
+.hero-points li{display:flex;align-items:center;gap:7px;font-weight:500;font-size:13px;color:#e0e0e0;white-space:nowrap}
+.hero-points li::before{content:"✓";display:grid;place-items:center;flex:0 0 18px;height:18px;width:18px;background:var(--red);color:#fff;border-radius:50%;font-size:10px;font-weight:900}
 
 /* ── SECTION WRAP ── */
 .section{padding:88px 28px}
@@ -300,20 +303,44 @@ a{color:inherit;text-decoration:none}
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
-  .hero{padding:64px 20px 56px}
-  .hero-showcase{margin-top:30px}
-  .section{padding:60px 20px}
-  .btn{width:100%;}
-  .cta-row{width:100%;}
-  .so-save{font-size:20px}
-  .hero-points{gap:8px 18px}
-  .steps,.why-grid,.reviews{grid-template-columns:1fr}
-  .ba-grid{grid-template-columns:1fr}
-  .spec{grid-template-columns:1fr;gap:26px}
-  .form-grid{grid-template-columns:1fr;gap:30px}
-  .areas{columns:1}
-  .float-call{display:inline-flex}
+  .hero{padding:44px 20px 46px}
+  .hero-showcase{margin-top:24px;max-width:100%}
+  /* premium eyebrow: single line, refined */
+  .eyebrow{font-size:9.5px;letter-spacing:.14em;padding:7px 16px;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+  /* tighter, punchier headline */
+  .hero h1{font-size:clamp(40px,12vw,58px)}
+  .hero h1 .lead{font-size:.5em;letter-spacing:.04em}
+  .hero-sub{font-size:15px;margin-top:14px;max-width:340px;line-height:1.5}
+  /* CTAs: full width, generous tap height, clear hierarchy */
+  .cta-row{width:100%;flex-direction:column;gap:12px;margin-top:24px}
+  .btn{width:100%;padding:17px 24px;font-size:14px}
+  /* trust points: clean 2x2 grid instead of cramped wrap */
+  .hero-points{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-top:26px;max-width:340px}
+  .hero-points li{font-size:12.5px;justify-content:flex-start}
+  .vid-mute{font-size:10.5px;padding:6px 12px;top:10px;right:10px}
+  .show-tag{font-size:10px;padding:5px 11px;top:10px;left:10px}
+  .section{padding:56px 20px}
+  .s-title{font-size:clamp(26px,7vw,34px)}
+  .s-sub{font-size:15px}
+  .steps,.why-grid,.reviews{grid-template-columns:1fr;gap:18px}
+  .ba-grid{grid-template-columns:1fr;gap:18px}
+  .ba-card[style]{grid-column:auto!important}
+  .spec{grid-template-columns:1fr;gap:24px}
+  .spec-photo{max-width:300px;margin:0 auto}
+  .form-grid{grid-template-columns:1fr;gap:26px}
+  .form-card{padding:26px 22px;min-height:auto}
+  .areas{columns:2;column-gap:20px}
+  .offer-strip{padding:48px 22px}
+  .offer-strip .save{flex-direction:column;gap:2px}
+  .float-call{display:inline-flex;bottom:14px;right:14px;padding:13px 20px;box-shadow:0 8px 26px rgba(215,25,32,.55)}
   .header-phone span.full{display:none}
+  .site-header{padding:12px 18px}
+  .site-header img{height:38px}
+}
+@media(max-width:380px){
+  .hero h1{font-size:46px}
+  .hero-points{grid-template-columns:1fr}
+  .areas{columns:1}
 }
 </style>
 </head>
@@ -354,21 +381,18 @@ a{color:inherit;text-decoration:none}
 
     <!-- VIDEO SHOWCASE -->
     <figure class="hero-showcase">
-      <span class="show-tag">Real Client Story &nbsp;·&nbsp; <strong>Watch</strong></span>
-      <video class="hero-video-feat" autoplay muted loop playsinline controls poster="/img/hero-poster.jpg">
+      <span class="show-tag">Real Client Result</span>
+      <video id="hero-video" class="hero-video-feat" autoplay muted loop playsinline preload="auto" poster="/img/hero-poster.jpg">
         <source src="/video/hero.mp4" type="video/mp4">
       </video>
-      <div class="show-offer">
-        <span class="so-save">SAVE $400</span>
-        <span class="so-note">Victoria Day Special · Limited Time</span>
-      </div>
+      <button id="vid-mute" class="vid-mute" aria-label="Unmute video" onclick="toggleMute()">🔇 Tap for sound</button>
     </figure>
 
     <ul class="hero-points">
-      <li>Ultra-realistic hairline results</li>
-      <li>Non-surgical — no scars, no downtime</li>
-      <li>Fully customized design</li>
-      <li>10+ years serving the GTA</li>
+      <li>Ultra-realistic results</li>
+      <li>Non-surgical</li>
+      <li>Custom hairline design</li>
+      <li>10+ years in the GTA</li>
     </ul>
   </div>
 </section>
@@ -383,6 +407,7 @@ a{color:inherit;text-decoration:none}
       <p class="s-sub">Natural, undetectable density at conversational distance — the look of a closely-shaved, full head of hair.</p>
     </div>
     <div class="ba-grid">
+      <div class="ba-card" style="grid-column:1/-1"><img class="ba-single" src="/img/transformation-3stage.jpg" alt="SMP 3-stage transformation: before, hairline design, and final result"><div class="ba-cap">The full journey — before, custom hairline design, and the finished natural result.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets5.jpg" alt="SMP before and after"><div class="ba-cap">Receding hairline rebuilt with a natural, defined front line.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets.jpg" alt="SMP before and after"><div class="ba-cap">Full scalp restoration with a dense, realistic follicle field.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20for%20women%20(9).jpg" alt="SMP density shading for women"><div class="ba-cap">SMP density shading for women with diffuse thinning.</div></div>
@@ -644,8 +669,32 @@ a{color:inherit;text-decoration:none}
   var hdr=document.querySelector('.site-header');
   window.addEventListener('scroll',function(){if(hdr){hdr.style.boxShadow=window.scrollY>10?'0 4px 20px rgba(0,0,0,.10)':'0 1px 12px rgba(0,0,0,.05)';}},{passive:true});
 
+  /* ───────── hero video mute toggle ───────── */
+  window.toggleMute=function(){
+    var hv=document.getElementById('hero-video');
+    var btn=document.getElementById('vid-mute');
+    if(!hv) return;
+    hv.muted=!hv.muted;
+    if(!hv.muted){ var p=hv.play(); if(p&&p.catch){p.catch(function(){});} }
+    if(btn){ btn.innerHTML = hv.muted ? '🔇 Tap for sound' : '🔊 Sound on'; }
+  };
+
   /* ───────── boot ───────── */
-  function boot(){barEl=document.getElementById('lcc-bar');startTimer();}
+  function boot(){
+    barEl=document.getElementById('lcc-bar');
+    startTimer();
+    // Force-start the hero video muted (required for autoplay across browsers)
+    var hv=document.getElementById('hero-video');
+    if(hv){
+      hv.muted=true; hv.defaultMuted=true; hv.playsInline=true;
+      var tryPlay=function(){ var p=hv.play(); if(p&&p.catch){p.catch(function(){});} };
+      tryPlay();
+      hv.addEventListener('canplay',tryPlay,{once:true});
+      // Some mobile browsers only allow play after first interaction
+      document.addEventListener('touchstart',tryPlay,{once:true});
+      document.addEventListener('click',tryPlay,{once:true});
+    }
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
