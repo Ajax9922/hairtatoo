@@ -45,6 +45,9 @@ src="https://www.facebook.com/tr?id=PIXEL_ID&ev=PageView&noscript=1"/></noscript
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 body{
   font-family:'Poppins',sans-serif;
   color:var(--charcoal);
@@ -62,7 +65,7 @@ a{color:inherit;text-decoration:none}
 
 /* ── HEADER ── */
 .site-header{
-  position:sticky;top:0;z-index:100;
+  position:sticky;top:0;z-index:100;transition:box-shadow .2s,background .2s;
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 28px;
   background:rgba(255,255,255,.95);
@@ -132,6 +135,8 @@ a{color:inherit;text-decoration:none}
 }
 .btn-red{background:var(--red);color:#fff;box-shadow:0 10px 30px rgba(215,25,32,.35)}
 .btn-red:hover{background:var(--red-dark);transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn:focus-visible{outline:3px solid rgba(215,25,32,.5);outline-offset:2px}
 .btn-ghost{background:transparent;color:#fff;border:2px solid #fff}
 .btn-ghost:hover{background:#fff;color:#000}
 
@@ -225,7 +230,8 @@ a{color:inherit;text-decoration:none}
 .offer-strip{background:linear-gradient(135deg,var(--red),var(--red-dark));text-align:center;padding:64px 28px}
 .offer-strip .tag{font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:.2em;text-transform:uppercase;font-size:14px;color:#ffd5d7;margin-bottom:10px}
 .offer-strip .save{font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(44px,8vw,90px);line-height:1;color:#fff;text-transform:uppercase}
-.offer-strip .save small{font-size:.42em;vertical-align:top}
+.offer-strip .save{display:flex;align-items:baseline;justify-content:center;gap:14px}
+.offer-strip .save small{font-size:.34em;letter-spacing:.04em}
 .offer-strip .meta{font-weight:600;margin-top:10px;color:#fff;font-size:18px}
 .offer-strip .btn{margin-top:26px;background:#fff;color:var(--red);}
 .offer-strip .btn:hover{background:#000;color:#fff}
@@ -237,7 +243,7 @@ a{color:inherit;text-decoration:none}
 .form-copy h2 .accent{color:var(--red)}
 .form-copy p{color:var(--grey);margin-bottom:14px}
 .form-copy .offer-line{color:var(--red2);font-weight:700;font-family:'Montserrat',sans-serif}
-.form-card{background:#fff;border:1px solid #e7e7e7;border-radius:16px;padding:34px;box-shadow:0 14px 40px rgba(0,0,0,.08)}
+.form-card{background:#fff;border:1px solid #e7e7e7;border-radius:16px;padding:34px;box-shadow:0 14px 40px rgba(0,0,0,.08);min-height:520px}
 .form-card h3{font-size:22px;text-transform:uppercase;margin-bottom:6px;color:#000}
 .form-card .note{color:#888;font-size:14px;margin-bottom:22px}
 .field{margin-bottom:16px}
@@ -247,7 +253,7 @@ a{color:inherit;text-decoration:none}
   width:100%;padding:13px 14px;background:#fafafa;border:1px solid #ddd;border-radius:8px;
   color:#111;font-family:'Poppins',sans-serif;font-size:15px;
 }
-.field input:focus,.field select:focus{outline:none;border-color:var(--red)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(215,25,32,.15)}
 .form-submit{width:100%;margin-top:6px;background:var(--red);color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:16px;padding:16px;border:none;border-radius:8px;cursor:pointer;transition:background .2s}
 .form-submit:hover{background:var(--red-dark)}
 .form-disclaim{text-align:center;font-size:12px;color:#777;margin-top:14px}
@@ -293,6 +299,11 @@ a{color:inherit;text-decoration:none}
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
+  .hero{padding:64px 20px 56px}
+  .hero-showcase{margin-top:30px}
+  .section{padding:60px 20px}
+  .btn{width:100%;}
+  .cta-row{width:100%;}
   .so-save{font-size:20px}
   .hero-points{gap:8px 18px}
   .steps,.why-grid,.reviews{grid-template-columns:1fr}
@@ -364,7 +375,7 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- ══ BEFORE / AFTER ══ -->
-<section class="section section-alt" id="results">
+<section class="reveal section section-alt" id="results">
   <div class="wrap">
     <div class="s-head">
       <p class="s-label">Real Results</p>
@@ -385,7 +396,7 @@ a{color:inherit;text-decoration:none}
 
 
 <!-- ══ VIDEO ══ -->
-<section class="section" id="video">
+<section class="reveal section" id="video">
   <div class="wrap">
     <div class="s-head">
       <p class="s-label">Watch</p>
@@ -400,7 +411,7 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- ══ TECHNIQUE / HOW IT WORKS ══ -->
-<section class="section" id="how">
+<section class="reveal section" id="how">
   <div class="wrap">
     <div class="s-head">
       <p class="s-label">The Technique</p>
@@ -426,7 +437,7 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- ══ WHY CHOOSE ══ -->
-<section class="section section-light" id="why">
+<section class="reveal section section-light" id="why">
   <div class="wrap">
     <div class="s-head">
       <p class="s-label" style="color:var(--red)">Why HairTattoo.ca</p>
@@ -453,9 +464,9 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- ══ SPECIALIST ══ -->
-<section class="section section-alt" id="specialist">
+<section class="reveal section section-alt" id="specialist">
   <div class="wrap spec">
-    <img class="spec-photo" src="/img/specialist.jpg" alt="SMP Specialist" onerror="this.style.opacity=.15">
+    <img class="spec-photo" src="https://hairtattoo.ca/wp-content/uploads/2023/05/SIMON.jpg" alt="Simon — SMP Specialist at HairTattoo.ca" loading="lazy" onerror="this.onerror=null;this.src='/img/specialist.jpg'">
     <div>
       <p class="role">Your SMP Specialist</p>
       <h2>Meet Simon</h2>
@@ -468,7 +479,7 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- ══ REVIEWS ══ -->
-<section class="section" id="reviews">
+<section class="reveal section" id="reviews">
   <div class="wrap">
     <div class="s-head">
       <p class="s-label">5-Star Reviews</p>
@@ -523,7 +534,7 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- ══ SERVICE AREAS ══ -->
-<section class="section section-alt" id="areas">
+<section class="reveal section section-alt" id="areas">
   <div class="wrap">
     <div class="s-head">
       <p class="s-label">Where We Serve</p>
@@ -625,6 +636,14 @@ a{color:inherit;text-decoration:none}
     document.getElementById('form-fields').style.display='none';
     document.getElementById('form-success').classList.add('show');
   };
+
+  /* ───────── scroll reveals ───────── */
+  var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+
+  /* ───────── header shadow on scroll ───────── */
+  var hdr=document.querySelector('.site-header');
+  window.addEventListener('scroll',function(){if(hdr){hdr.style.boxShadow=window.scrollY>10?'0 4px 20px rgba(0,0,0,.10)':'0 1px 12px rgba(0,0,0,.05)';}},{passive:true});
 
   /* ───────── boot ───────── */
   function boot(){barEl=document.getElementById('lcc-bar');startTimer();}
