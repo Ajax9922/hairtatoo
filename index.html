@@ -47,8 +47,8 @@ src="https://www.facebook.com/tr?id=PIXEL_ID&ev=PageView&noscript=1"/></noscript
 html{scroll-behavior:smooth}
 body{
   font-family:'Poppins',sans-serif;
-  color:var(--white);
-  background:var(--black);
+  color:var(--charcoal);
+  background:var(--white);
   line-height:1.6;
   overflow-x:hidden;
 }
@@ -65,20 +65,21 @@ a{color:inherit;text-decoration:none}
   position:sticky;top:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 28px;
-  background:rgba(0,0,0,.92);
+  background:rgba(255,255,255,.95);
   backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--charcoal2);
+  border-bottom:1px solid #e7e7e7;
+  box-shadow:0 1px 12px rgba(0,0,0,.05);
 }
 .site-header img{height:42px;width:auto}
 .header-phone{
   display:inline-flex;align-items:center;gap:8px;
   font-family:'Montserrat',sans-serif;font-weight:800;font-size:16px;letter-spacing:.02em;
-  color:var(--white);
+  color:var(--charcoal);
   border:2px solid var(--red);
   padding:9px 18px;border-radius:6px;
   transition:background .2s,color .2s;
 }
-.header-phone:hover{background:var(--red);}
+.header-phone:hover{background:var(--red);color:#fff;}
 
 /* ── HERO ── */
 .hero{
@@ -146,34 +147,36 @@ a{color:inherit;text-decoration:none}
 
 /* ── SECTION WRAP ── */
 .section{padding:88px 28px}
-.section-alt{background:var(--charcoal)}
+.section-alt{background:var(--light)}
 .section-light{background:var(--light);color:var(--charcoal)}
 .wrap{max-width:var(--maxw);margin:0 auto}
 .s-head{text-align:center;margin-bottom:52px}
 .s-label{font-family:'Montserrat',sans-serif;font-weight:800;font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
-.s-title{font-size:clamp(30px,4.5vw,48px);text-transform:uppercase}
+.s-title{font-size:clamp(30px,4.5vw,48px);text-transform:uppercase;color:var(--charcoal)}
 .s-title .accent{color:var(--red)}
 .s-sub{max-width:680px;margin:16px auto 0;color:var(--grey);font-size:17px}
-.section:not(.section-light) .s-sub{color:#aaa}
+.s-sub{color:var(--grey)}
 .divider{width:64px;height:4px;background:var(--red);margin:18px auto 0;border-radius:2px}
 
 /* ── BEFORE/AFTER ── */
 .ba-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .ba-single{width:100%;height:auto;display:block}
-.ba-card{background:#000;border-radius:14px;overflow:hidden;border:1px solid #2a2a2a}
+.video-wrap{position:relative;width:100%;max-width:900px;margin:0 auto;aspect-ratio:16/9;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.18);border:1px solid #e7e7e7}
+.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ba-card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e7e7e7;box-shadow:0 8px 24px rgba(0,0,0,.05)}
 .ba-imgs{display:grid;grid-template-columns:1fr 1fr;position:relative}
 .ba-imgs figure{position:relative;margin:0}
 .ba-imgs img{width:100%;height:230px;object-fit:cover}
 .ba-imgs figcaption{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.78);color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:4px}
 .ba-imgs figure:last-child figcaption{background:var(--red)}
-.ba-cap{padding:16px 18px;font-size:14px;color:#bbb}
+.ba-cap{padding:16px 18px;font-size:14px;color:var(--grey)}
 
 /* ── STEPS / TECHNIQUE ── */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;counter-reset:step}
-.step{position:relative;background:#000;border:1px solid #2a2a2a;border-radius:14px;padding:34px 26px 30px}
+.step{position:relative;background:#fff;border:1px solid #e7e7e7;border-radius:14px;padding:34px 26px 30px;box-shadow:0 8px 24px rgba(0,0,0,.05)}
 .step::before{counter-increment:step;content:counter(step);position:absolute;top:-22px;left:26px;width:46px;height:46px;display:grid;place-items:center;background:var(--red);color:#fff;font-family:'Montserrat',sans-serif;font-weight:900;font-size:20px;border-radius:50%;box-shadow:0 8px 20px rgba(215,25,32,.4)}
-.step h3{font-size:20px;text-transform:uppercase;margin:14px 0 10px}
-.step p{color:#aaa;font-size:15px}
+.step h3{font-size:20px;text-transform:uppercase;margin:14px 0 10px;color:#000}
+.step p{color:var(--grey);font-size:15px}
 
 /* ── WHY / TRUST ── */
 .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -184,17 +187,17 @@ a{color:inherit;text-decoration:none}
 
 /* ── SPECIALIST ── */
 .spec{display:grid;grid-template-columns:.8fr 1.2fr;gap:46px;align-items:center}
-.spec-photo{border-radius:14px;border:1px solid #333;width:100%;object-fit:cover;aspect-ratio:4/5;background:#1a1a1a}
+.spec-photo{border-radius:14px;border:1px solid #e7e7e7;width:100%;object-fit:cover;aspect-ratio:4/5;background:#eee;box-shadow:0 14px 40px rgba(0,0,0,.1)}
 .spec h2{font-size:clamp(28px,4vw,42px);text-transform:uppercase;margin-bottom:8px}
 .spec .role{color:var(--red);font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:14px;margin-bottom:18px}
-.spec p{color:#bbb;margin-bottom:14px}
+.spec p{color:var(--grey);margin-bottom:14px}
 
 /* ── REVIEWS ── */
 .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.review{background:var(--charcoal2);border:1px solid #2a2a2a;border-radius:14px;padding:26px}
+.review{background:#fff;border:1px solid #e7e7e7;border-radius:14px;padding:26px;box-shadow:0 8px 24px rgba(0,0,0,.05)}
 .stars{color:#FFC107;font-size:16px;letter-spacing:2px;margin-bottom:12px}
-.review p{font-size:15px;color:#ddd;font-style:italic}
-.review .who{margin-top:14px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:#fff;font-style:normal}
+.review p{font-size:15px;color:#444;font-style:italic}
+.review .who{margin-top:14px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:#000;font-style:normal}
 
 /* ── OFFER STRIP ── */
 .offer-strip{background:linear-gradient(135deg,var(--red),var(--red-dark));text-align:center;padding:64px 28px}
@@ -206,21 +209,21 @@ a{color:inherit;text-decoration:none}
 .offer-strip .btn:hover{background:#000;color:#fff}
 
 /* ── FORM ── */
-.form-section{background:var(--charcoal);padding:88px 28px}
+.form-section{background:var(--light);padding:88px 28px}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;max-width:var(--maxw);margin:0 auto}
-.form-copy h2{font-size:clamp(30px,4.5vw,46px);text-transform:uppercase;margin-bottom:16px}
+.form-copy h2{font-size:clamp(30px,4.5vw,46px);text-transform:uppercase;margin-bottom:16px;color:#000}
 .form-copy h2 .accent{color:var(--red)}
-.form-copy p{color:#bbb;margin-bottom:14px}
+.form-copy p{color:var(--grey);margin-bottom:14px}
 .form-copy .offer-line{color:var(--red2);font-weight:700;font-family:'Montserrat',sans-serif}
-.form-card{background:#000;border:1px solid #2a2a2a;border-radius:16px;padding:34px}
-.form-card h3{font-size:22px;text-transform:uppercase;margin-bottom:6px}
+.form-card{background:#fff;border:1px solid #e7e7e7;border-radius:16px;padding:34px;box-shadow:0 14px 40px rgba(0,0,0,.08)}
+.form-card h3{font-size:22px;text-transform:uppercase;margin-bottom:6px;color:#000}
 .form-card .note{color:#888;font-size:14px;margin-bottom:22px}
 .field{margin-bottom:16px}
-.field label{display:block;font-size:13px;font-weight:600;color:#ccc;margin-bottom:6px}
+.field label{display:block;font-size:13px;font-weight:600;color:#444;margin-bottom:6px}
 .field label .req{color:var(--red)}
 .field input,.field select{
-  width:100%;padding:13px 14px;background:#141414;border:1px solid #333;border-radius:8px;
-  color:#fff;font-family:'Poppins',sans-serif;font-size:15px;
+  width:100%;padding:13px 14px;background:#fafafa;border:1px solid #ddd;border-radius:8px;
+  color:#111;font-family:'Poppins',sans-serif;font-size:15px;
 }
 .field input:focus,.field select:focus{outline:none;border-color:var(--red)}
 .form-submit{width:100%;margin-top:6px;background:var(--red);color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:16px;padding:16px;border:none;border-radius:8px;cursor:pointer;transition:background .2s}
@@ -236,7 +239,7 @@ a{color:inherit;text-decoration:none}
 .areas .grp{break-inside:avoid;margin-bottom:22px}
 .areas h4{font-family:'Montserrat',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--red);margin-bottom:8px}
 .areas ul{list-style:none}
-.areas li{color:#999;font-size:14px;padding:2px 0}
+.areas li{color:var(--grey);font-size:14px;padding:2px 0}
 
 /* ── FOOTER ── */
 .footer{background:#000;border-top:1px solid #1f1f1f;padding:54px 28px 30px;text-align:center}
@@ -358,6 +361,22 @@ a{color:inherit;text-decoration:none}
   </div>
 </section>
 
+
+<!-- ══ VIDEO ══ -->
+<section class="section" id="video">
+  <div class="wrap">
+    <div class="s-head">
+      <p class="s-label">Watch</p>
+      <h2 class="s-title">See the <span class="accent">Transformation</span></h2>
+      <div class="divider"></div>
+      <p class="s-sub">A real look at our Scalp Micropigmentation work and what to expect.</p>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/P-AVk-uKkG4" title="HairTattoo.ca SMP" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
 <!-- ══ TECHNIQUE / HOW IT WORKS ══ -->
 <section class="section" id="how">
   <div class="wrap">
@@ -417,10 +436,10 @@ a{color:inherit;text-decoration:none}
     <img class="spec-photo" src="/img/specialist.jpg" alt="SMP Specialist" onerror="this.style.opacity=.15">
     <div>
       <p class="role">Your SMP Specialist</p>
-      <h2>Artistry &amp; Precision</h2>
-      <p>HairTattoo.ca was created to help men and women regain confidence through advanced Scalp Micropigmentation. We focus on artistry, attention to detail, and personalized care.</p>
-      <p>Our specialists create results designed specifically for each client's facial structure, age, hair pattern, and goals — with realistic outcomes that age well over time.</p>
-      <p>That commitment is why we have so many five-star scalp micropigmentation reviews across Toronto.</p>
+      <h2>Meet Simon</h2>
+      <p>HairTattoo.ca is Canada's first SMP clinic — with practitioners trained in the original SMP® method pioneered by Ian Watson. Lead artist Simon brings years of hands-on experience and a meticulous eye for natural, age-appropriate results.</p>
+      <p>Simon designs every hairline specifically for each client's facial structure, age, and hair pattern, and works with you across sessions until you're completely satisfied — patient, professional, and trusted by hundreds of clients.</p>
+      <p>That commitment is why HairTattoo.ca has earned so many five-star scalp micropigmentation reviews across Toronto &amp; the GTA.</p>
       <a href="#consult-form" class="btn btn-red" style="margin-top:10px">Book Your Free Consultation</a>
     </div>
   </div>
@@ -433,11 +452,12 @@ a{color:inherit;text-decoration:none}
       <p class="s-label">5-Star Reviews</p>
       <h2 class="s-title">What Clients <span class="accent">Say</span></h2>
       <div class="divider"></div>
+      <p class="s-sub">Rated 5 stars by clients across Toronto &amp; the GTA on Google.</p>
     </div>
     <div class="reviews">
-      <div class="review"><div class="stars">★★★★★</div><p>"Did a great job. I'm very happy with the results — booking was smooth and easy. I'd recommend this place to anyone looking for SMP."</p><div class="who">— Verified Client, Toronto</div></div>
-      <div class="review"><div class="stars">★★★★★</div><p>"Very patient making sure I was satisfied across several sessions. Friendly, replies quickly, and flexible with scheduling. Highly recommend."</p><div class="who">— Verified Client, GTA</div></div>
-      <div class="review"><div class="stars">★★★★★</div><p>"Though it was my second choice for a full Norwood-7 SMP, I'm glad I chose this studio. The outcome looks very natural and blended."</p><div class="who">— Verified Client, Toronto</div></div>
+      <div class="review"><div class="stars">★★★★★</div><p>"I specifically wanted an all-natural soft hairline, and Simon nailed it perfectly. I wish I'd done it years earlier. I've already recommended a few of my balding friends to the clinic."</p><div class="who">— Verified Google Review</div></div>
+      <div class="review"><div class="stars">★★★★★</div><p>"Though HairTattoo was my second choice for a full Norwood-7 SMP, I'm so glad I chose this studio. Simon was punctual, professional, patient, and worked until I was completely satisfied."</p><div class="who">— Verified Google Review</div></div>
+      <div class="review"><div class="stars">★★★★★</div><p>"On behalf of my dad — he had a great experience. Simon was very friendly and did an excellent job. The outcome looks very natural and blended."</p><div class="who">— Verified Google Review</div></div>
     </div>
   </div>
 </section>
