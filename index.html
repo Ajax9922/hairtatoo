@@ -192,6 +192,7 @@ a{color:inherit;text-decoration:none}
 /* ── BEFORE/AFTER ── */
 .ba-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .ba-single{width:100%;height:auto;display:block}
+.ba-card video.ba-single{max-height:520px;object-fit:cover;background:#000}
 .video-wrap{position:relative;width:100%;max-width:900px;margin:0 auto;aspect-ratio:16/9;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.18);border:1px solid #e7e7e7}
 .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .ba-card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e7e7e7;box-shadow:0 8px 24px rgba(0,0,0,.05)}
@@ -407,13 +408,16 @@ a{color:inherit;text-decoration:none}
       <p class="s-sub">Natural, undetectable density at conversational distance — the look of a closely-shaved, full head of hair.</p>
     </div>
     <div class="ba-grid">
-      <div class="ba-card" style="grid-column:1/-1"><img class="ba-single" src="/img/transformation-3stage.jpg" alt="SMP 3-stage transformation: before, hairline design, and final result"><div class="ba-cap">The full journey — before, custom hairline design, and the finished natural result.</div></div>
+      <div class="ba-card" style="grid-column:1/-1"><video class="ba-single" autoplay muted loop playsinline preload="metadata" poster="/img/hero-poster.jpg"><source src="/video/showcase.mp4" type="video/mp4"></video><div class="ba-cap">The full journey — before, custom hairline design, and the finished natural result.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets5.jpg" alt="SMP before and after"><div class="ba-cap">Receding hairline rebuilt with a natural, defined front line.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets.jpg" alt="SMP before and after"><div class="ba-cap">Full scalp restoration with a dense, realistic follicle field.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20for%20women%20(9).jpg" alt="SMP density shading for women"><div class="ba-cap">SMP density shading for women with diffuse thinning.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets7.jpg" alt="SMP before and after"><div class="ba-cap">Crown density and definition using the original SMP technique.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets%208.jpg" alt="SMP scar camouflage"><div class="ba-cap">FUE hair-transplant scar camouflaged and blended.</div></div>
       <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets%2010.jpg" alt="SMP scar camouflage"><div class="ba-cap">Scar concealment and added density across the scalp.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/hair-tattoo-before-and-after-SMP-Toronto.jpg" alt="SMP before and after — hairline restoration"><div class="ba-cap">Hairline restoration — Toronto GTA's scalp micropigmentation specialists.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/hairline-tattoo.jpg" alt="SMP before and after — crown density"><div class="ba-cap">Discover the benefits of SMP — fuller density across the crown.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/scalp-micropigmentation-Toronto-hair-tattoo-1024x697-1.jpg" alt="SMP before and after — full coverage profile"><div class="ba-cap">Natural full-coverage result, seamless from every angle.</div></div>
     </div>
   </div>
 </section>
@@ -684,16 +688,13 @@ a{color:inherit;text-decoration:none}
     barEl=document.getElementById('lcc-bar');
     startTimer();
     // Force-start the hero video muted (required for autoplay across browsers)
-    var hv=document.getElementById('hero-video');
-    if(hv){
-      hv.muted=true; hv.defaultMuted=true; hv.playsInline=true;
-      var tryPlay=function(){ var p=hv.play(); if(p&&p.catch){p.catch(function(){});} };
-      tryPlay();
-      hv.addEventListener('canplay',tryPlay,{once:true});
-      // Some mobile browsers only allow play after first interaction
-      document.addEventListener('touchstart',tryPlay,{once:true});
-      document.addEventListener('click',tryPlay,{once:true});
-    }
+    document.querySelectorAll('video[autoplay]').forEach(function(v){
+      v.muted=true; v.defaultMuted=true; v.playsInline=true;
+      var go=function(){var p=v.play(); if(p&&p.catch){p.catch(function(){});}};
+      go(); v.addEventListener('canplay',go,{once:true});
+      document.addEventListener('touchstart',go,{once:true});
+      document.addEventListener('click',go,{once:true});
+    });
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
