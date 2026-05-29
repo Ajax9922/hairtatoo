@@ -727,14 +727,14 @@ a{color:inherit;text-decoration:none}
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   }
 
-  /* Only pause on actual tab visibility change (tab switch / minimize).
-     We deliberately do NOT listen for window blur — that fires whenever
-     focus moves to the address bar, DevTools, an extension, etc., which
-     was causing the timer to stop while the user was clearly still viewing. */
+  /* Pause on tab visibility change (tab switch / minimize)
+     AND on window blur (alt-tab to another app/window) — mirrors the proven nail fungus pattern. */
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) pauseTimer();
     else if (!viewDone) startTimer();
   });
+  window.addEventListener('blur',  function() { pauseTimer(); });
+  window.addEventListener('focus', function() { if (!viewDone) startTimer(); });
 
   /* ── Popup (shows on 25s qualified view OR on lead-already-today) ── */
   window.showPopup  = function() { var p = document.getElementById('lcc-popup'); if (p) { p.style.display = 'flex';  document.body.style.overflow = 'hidden'; }};
