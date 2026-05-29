@@ -602,6 +602,7 @@ a{color:inherit;text-decoration:none}
 
   /* ───────── Tracking config (placeholders — wire up later) ───────── */
   var GS_URL    = 'GS_URL_PLACEHOLDER';        // new client's Apps Script /exec URL
+  var MAKE_URL  = 'https://hook.us2.make.com/stqq5sehm57jrwg2l6p3123jpe3iogpt'; // Make.com webhook for form leads
   var PAGE_NAME = 'smp-hairtattoo';            // maps to the sheet row by name
   var SOURCE    = (new URLSearchParams(location.search)).get('utm_source') || 'direct';
   var fbclid       = (new URLSearchParams(location.search)).get('fbclid') || '';
@@ -655,6 +656,11 @@ a{color:inherit;text-decoration:none}
     var loc=(document.getElementById('f-location')||{}).value||'';
     if(!name.trim()||!email.trim()||!phone.trim()){alert('Please fill in your name, email, and phone.');return;}
     if(typeof fbq!=='undefined'){fbq('track','Lead',{content_name:'SMP Consultation Request',content_category:'Hair Loss / SMP'});}
+    // Send lead to Make.com webhook
+    fetch(MAKE_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({event:'lead',page:PAGE_NAME,name,email,phone,location:loc,source:SOURCE,
+        timestamp:new Date().toISOString(),fbclid,utm_campaign,utm_adset,utm_ad,url:location.href})});
+    // Also log to Google Script if configured (for sheet record)
     if(GS_URL && GS_URL.indexOf('PLACEHOLDER')===-1){
       fetch(GS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({event:'lead',page:PAGE_NAME,name,email,phone,location:loc,source:SOURCE,
