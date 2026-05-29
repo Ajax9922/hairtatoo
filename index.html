@@ -627,15 +627,6 @@ a{color:inherit;text-decoration:none}
   function markViewed() {
     localStorage.setItem('lcc_v_' + uid, Date.now().toString());
   }
-  function alreadyLeadToday() {
-    try {
-      var t = parseInt(localStorage.getItem('lcc_l_' + uid) || '0', 10);
-      return (Date.now() - t) < 86400000;
-    } catch(e) { return false; }
-  }
-  function markLead() {
-    try { localStorage.setItem('lcc_l_' + uid, Date.now().toString()); } catch(e) {}
-  }
 
   /* ── Status check (fetch w/ JSONP fallback) ── */
   function checkStatus(cb) {
@@ -766,22 +757,8 @@ a{color:inherit;text-decoration:none}
       return;
     }
 
-    /* 24-hour lead dedup — same browser submits once per day */
-    if (alreadyLeadToday()) {
-      console.log('[HT] Lead already submitted in last 24h — skipping');
-      var fields = document.getElementById('form-fields');
-      var succ   = document.getElementById('form-success');
-      if (fields) fields.style.display = 'none';
-      if (succ) {
-        succ.innerHTML = '<div class="check">✅</div>'
-          + '<h3 style="color:var(--red2)">You\'re already booked!</h3>'
-          + '<p style="color:#bbb;margin-top:8px">We received your consultation request recently and our team will be in touch shortly. No need to submit again.</p>';
-        succ.classList.add('show');
-      }
-      return;
-    }
-
     var btn = document.querySelector('.form-submit');
+    var origLabel = btn ? btn.textContent : 'Book My Free Consultation →';
     if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
 
     if (typeof fbq !== 'undefined') {
@@ -805,9 +782,15 @@ a{color:inherit;text-decoration:none}
         page:      PAGE_NAME,
         timestamp: new Date().toISOString()
       })
-    }).catch(function() {});
+    })
+    .then(function(r) {
+      console.log('[HT] Lead sent — Make responded with status:', r.status);
+      if (!r.ok) console.warn('[HT] Non-2xx response from Make:', r.status, r.statusText);
+    })
+    .catch(function(err) {
+      console.error('[HT] Lead fetch failed:', err && err.message ? err.message : err);
+    });
 
-    markLead();
     document.getElementById('form-fields').style.display = 'none';
     document.getElementById('form-success').classList.add('show');
   };
