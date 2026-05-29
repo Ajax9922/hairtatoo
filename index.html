@@ -601,7 +601,7 @@ a{color:inherit;text-decoration:none}
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   /* ───────── Tracking config (placeholders — wire up later) ───────── */
-  var GS_URL    = 'GS_URL_PLACEHOLDER';        // new client's Apps Script /exec URL
+  var GS_URL    = 'https://script.google.com/macros/s/AKfycbzwVc1wPLIIKWY1GVPOCOFMnUW4L0hw4ojL8aTWqQqwsZW359WxZSnBG26C9rAHiHA7/exec';
   var MAKE_URL  = 'https://hook.us2.make.com/stqq5sehm57jrwg2l6p3123jpe3iogpt'; // Make.com webhook for form leads
   var PAGE_NAME = 'smp-hairtattoo';            // maps to the sheet row by name
   var SOURCE    = (new URLSearchParams(location.search)).get('utm_source') || 'direct';
@@ -656,10 +656,14 @@ a{color:inherit;text-decoration:none}
     var loc=(document.getElementById('f-location')||{}).value||'';
     if(!name.trim()||!email.trim()||!phone.trim()){alert('Please fill in your name, email, and phone.');return;}
     if(typeof fbq!=='undefined'){fbq('track','Lead',{content_name:'SMP Consultation Request',content_category:'Hair Loss / SMP'});}
-    // Send lead to Make.com webhook
-    fetch(MAKE_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({event:'lead',page:PAGE_NAME,name,email,phone,location:loc,source:SOURCE,
-        timestamp:new Date().toISOString(),fbclid,utm_campaign,utm_adset,utm_ad,url:location.href})});
+    // Send lead to Make.com webhook.
+    // Sent as form-urlencoded (a CORS-safelisted type) so it survives mode:'no-cors'
+    // and Make parses each field separately instead of dumping one "value" blob.
+    // (Do NOT set a Content-Type header here — passing URLSearchParams lets the
+    //  browser set the correct safelisted header automatically.)
+    fetch(MAKE_URL,{method:'POST',mode:'no-cors',
+      body:new URLSearchParams({event:'lead',page:PAGE_NAME,name:name,email:email,phone:phone,location:loc,source:SOURCE,
+        timestamp:new Date().toISOString(),fbclid:fbclid,utm_campaign:utm_campaign,utm_adset:utm_adset,utm_ad:utm_ad,url:location.href})});
     // Also log to Google Script if configured (for sheet record)
     if(GS_URL && GS_URL.indexOf('PLACEHOLDER')===-1){
       fetch(GS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
