@@ -597,115 +597,271 @@ a{color:inherit;text-decoration:none}
 <a href="tel:+16474929093" class="float-call" onclick="trackCall('float')">📞 Call Now</a>
 
 <script>
-(function(){
+(function() {
+
+  /* ═══ TRACKING CONFIG (mirrors nail fungus working pattern) ═══ */
+  var GS_URL    = 'https://script.google.com/macros/s/AKfycbzwVc1wPLIIKWY1GVPOCOFMnUW4L0hw4ojL8aTWqQqwsZW359WxZSnBG26C9rAHiHA7/exec';
+  var MAKE_URL  = 'https://hook.us2.make.com/stqq5sehm57jrwg2l6p3123jpe3iogpt';
+  var PAGE_NAME = 'smp-hairtattoo';
+  var SECONDS   = 25;
+
   document.getElementById('yr').textContent = new Date().getFullYear();
 
-  /* ───────── Tracking config (placeholders — wire up later) ───────── */
-  var GS_URL    = 'https://script.google.com/macros/s/AKfycbzwVc1wPLIIKWY1GVPOCOFMnUW4L0hw4ojL8aTWqQqwsZW359WxZSnBG26C9rAHiHA7/exec';
-  var MAKE_URL  = 'https://hook.us2.make.com/stqq5sehm57jrwg2l6p3123jpe3iogpt'; // Make.com webhook for form leads
-  var PAGE_NAME = 'smp-hairtattoo';            // maps to the sheet row by name
-  var SOURCE    = (new URLSearchParams(location.search)).get('utm_source') || 'direct';
-  var fbclid       = (new URLSearchParams(location.search)).get('fbclid') || '';
-  var utm_campaign = (new URLSearchParams(location.search)).get('utm_campaign') || '';
-  var utm_adset    = (new URLSearchParams(location.search)).get('utm_adset') || '';
-  var utm_ad       = (new URLSearchParams(location.search)).get('utm_ad') || '';
-
-  /* ───────── 25-second timer bar + qualified view ───────── */
-  var SECONDS=25, viewSent=false, elapsed=0, startedAt=null, running=false, barEl=null;
-
-  function sendView(){
-    if(viewSent) return; viewSent=true;
-    if(typeof fbq!=='undefined'){
-      fbq('track','ViewContent',{content_name:'SMP HairTattoo Landing',content_category:'Hair Loss / SMP'});
-    }
-    if(GS_URL && GS_URL.indexOf('PLACEHOLDER')===-1){
-      fetch(GS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({event:'view_25s',page:PAGE_NAME,source:SOURCE,
-          timestamp:new Date().toISOString(),fbclid,utm_campaign,utm_adset,utm_ad,url:location.href})});
-    }
+  /* ── Unique user ID (persistent in localStorage) ── */
+  var uid = localStorage.getItem('lcc_uid') || '';
+  if (!uid) {
+    uid = 'u' + Date.now() + Math.random().toString(36).substr(2, 6);
+    localStorage.setItem('lcc_uid', uid);
   }
-  function rafLoop(now){
-    if(!running) return;
-    if(document.hidden||document.visibilityState!=='visible'){pauseTimer();return;}
-    var s=elapsed+(now-startedAt)/1000;
-    var pct=Math.min(s/SECONDS*100,100);
-    if(barEl) barEl.style.width=pct.toFixed(3)+'%';
-    if(s>=SECONDS){running=false;if(barEl)barEl.style.width='100%';sendView();showPopup();return;}
-    requestAnimationFrame(rafLoop);
+
+  function utmSource() {
+    try { return new URLSearchParams(location.search).get('utm_source') || 'direct'; }
+    catch(e) { return 'direct'; }
   }
-  function startTimer(){if(running||viewSent)return;running=true;startedAt=performance.now();requestAnimationFrame(rafLoop);}
-  function pauseTimer(){if(!running)return;elapsed+=(performance.now()-startedAt)/1000;running=false;}
-  window.addEventListener('blur',pauseTimer);
-  window.addEventListener('focus',function(){if(!viewSent)startTimer();});
-  document.addEventListener('visibilitychange',function(){if(document.hidden)pauseTimer();else if(!viewSent)startTimer();});
 
-  /* ───────── popup ───────── */
-  window.showPopup=function(){var p=document.getElementById('lcc-popup');if(p){p.style.display='flex';document.body.style.overflow='hidden';}};
-  window.closePopup=function(){var p=document.getElementById('lcc-popup');if(p){p.style.display='none';document.body.style.overflow='';}};
+  /* ── 24hr dedup (views + leads) ── */
+  function alreadyViewedToday() {
+    var t = parseInt(localStorage.getItem('lcc_v_' + uid) || '0', 10);
+    return (Date.now() - t) < 86400000;
+  }
+  function markViewed() {
+    localStorage.setItem('lcc_v_' + uid, Date.now().toString());
+  }
+  function alreadyLeadToday() {
+    try {
+      var t = parseInt(localStorage.getItem('lcc_l_' + uid) || '0', 10);
+      return (Date.now() - t) < 86400000;
+    } catch(e) { return false; }
+  }
+  function markLead() {
+    try { localStorage.setItem('lcc_l_' + uid, Date.now().toString()); } catch(e) {}
+  }
 
-  /* ───────── call tracking ───────── */
-  window.trackCall=function(where){
-    if(typeof fbq!=='undefined'){fbq('track','Contact',{content_name:'Phone Call - '+where,content_category:'Hair Loss / SMP'});}
+  /* ── Status check (fetch w/ JSONP fallback) ── */
+  function checkStatus(cb) {
+    fetch(GS_URL + '?action=status&page=' + encodeURIComponent(PAGE_NAME) + '&_=' + Date.now(), {
+      method: 'GET', redirect: 'follow', cache: 'no-store'
+    })
+    .then(function(r) { return r.text(); })
+    .then(function(txt) {
+      var m = txt.match(/"status":"([^"]+)"/);
+      var raw = m ? m[1].toLowerCase().trim() : 'active';
+      var status = (raw === 'pause') ? 'paused' : raw;
+      console.log('[HT] Status:', status);
+      cb(status);
+    })
+    .catch(function() {
+      console.warn('[HT] fetch status failed — falling back to JSONP');
+      var cbName = 'htSt' + Date.now();
+      var done = false, timer = null, s = null;
+      window[cbName] = function(d) {
+        if (done) return; done = true; clearTimeout(timer);
+        try { delete window[cbName]; } catch(e) {}
+        if (s && s.parentNode) s.parentNode.removeChild(s);
+        var raw = ((d && d.status) || 'active').toString().toLowerCase().trim();
+        cb((raw === 'pause') ? 'paused' : raw);
+      };
+      s = document.createElement('script');
+      s.src = GS_URL + '?action=status&page=' + encodeURIComponent(PAGE_NAME) + '&callback=' + cbName + '&_=' + Date.now();
+      s.onerror = function() { if (!done) { done = true; clearTimeout(timer); cb('active'); }};
+      document.head.appendChild(s);
+      timer = setTimeout(function() { if (!done) { done = true; cb('active'); }}, 5000);
+    });
+  }
+
+  /* ── Log view via image pixel (zero CORS) ── */
+  function logView() {
+    if (alreadyViewedToday()) {
+      console.log('[HT] View already counted in last 24h — skipping');
+      return;
+    }
+    markViewed();
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'ViewContent', {
+        content_name: 'SMP HairTattoo Landing',
+        content_category: 'Hair Loss / SMP',
+        currency: 'CAD'
+      });
+    }
+    var src = GS_URL
+      + '?action=view'
+      + '&page='   + encodeURIComponent(PAGE_NAME)
+      + '&userId=' + encodeURIComponent(uid)
+      + '&source=' + encodeURIComponent(utmSource())
+      + '&t='      + Date.now();
+    var img = new Image();
+    img.src = src;
+    console.log('[HT] View logged');
+  }
+
+  /* ── 25-second timer (smooth via rAF, pauses on tab blur) ── */
+  var elapsed   = 0;
+  var startedAt = null;
+  var viewDone  = false;
+  var barEl     = null;
+  var running   = false;
+  var rafId     = null;
+
+  function rafLoop(now) {
+    if (!running) return;
+    if (document.hidden || document.visibilityState !== 'visible') { pauseTimer(); return; }
+    var secondsSoFar = elapsed + (now - startedAt) / 1000;
+    var pct = Math.min((secondsSoFar / SECONDS) * 100, 100);
+    if (barEl) barEl.style.width = pct.toFixed(3) + '%';
+    if (secondsSoFar >= SECONDS) {
+      running = false;
+      elapsed = SECONDS;
+      if (barEl) barEl.style.width = '100%';
+      if (!viewDone) {
+        viewDone = true;
+        logView();
+        showPopup();
+      }
+      return;
+    }
+    rafId = requestAnimationFrame(rafLoop);
+  }
+
+  function startTimer() {
+    if (running || viewDone) return;
+    running = true;
+    startedAt = performance.now();
+    rafId = requestAnimationFrame(rafLoop);
+  }
+
+  function pauseTimer() {
+    if (!running) return;
+    running = false;
+    elapsed += (performance.now() - startedAt) / 1000;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  }
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) pauseTimer();
+    else if (!viewDone) startTimer();
+  });
+  window.addEventListener('blur',  function() { pauseTimer(); });
+  window.addEventListener('focus', function() { if (!viewDone) startTimer(); });
+
+  /* ── Popup (shows on 25s qualified view OR on lead-already-today) ── */
+  window.showPopup  = function() { var p = document.getElementById('lcc-popup'); if (p) { p.style.display = 'flex';  document.body.style.overflow = 'hidden'; }};
+  window.closePopup = function() { var p = document.getElementById('lcc-popup'); if (p) { p.style.display = 'none';  document.body.style.overflow = ''; }};
+
+  /* ── Call tracking ── */
+  window.trackCall = function(where) {
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Contact', { content_name: 'Phone Call - ' + where, content_category: 'Hair Loss / SMP' });
+    }
   };
 
-  /* ───────── form submit ───────── */
-  window.submitForm=function(){
-    var name=(document.getElementById('f-name')||{}).value||'';
-    var email=(document.getElementById('f-email')||{}).value||'';
-    var phone=(document.getElementById('f-phone')||{}).value||'';
-    var loc=(document.getElementById('f-location')||{}).value||'';
-    if(!name.trim()||!email.trim()||!phone.trim()){alert('Please fill in your name, email, and phone.');return;}
-    if(typeof fbq!=='undefined'){fbq('track','Lead',{content_name:'SMP Consultation Request',content_category:'Hair Loss / SMP'});}
-    // Send lead to Make.com webhook.
-    // Sent as form-urlencoded (a CORS-safelisted type) so it survives mode:'no-cors'
-    // and Make parses each field separately instead of dumping one "value" blob.
-    // (Do NOT set a Content-Type header here — passing URLSearchParams lets the
-    //  browser set the correct safelisted header automatically.)
-    fetch(MAKE_URL,{method:'POST',mode:'no-cors',
-      body:new URLSearchParams({event:'lead',page:PAGE_NAME,name:name,email:email,phone:phone,location:loc,source:SOURCE,
-        timestamp:new Date().toISOString(),fbclid:fbclid,utm_campaign:utm_campaign,utm_adset:utm_adset,utm_ad:utm_ad,url:location.href})});
-    // Also log to Google Script if configured (for sheet record)
-    if(GS_URL && GS_URL.indexOf('PLACEHOLDER')===-1){
-      fetch(GS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({event:'lead',page:PAGE_NAME,name,email,phone,location:loc,source:SOURCE,
-          timestamp:new Date().toISOString(),fbclid,utm_campaign,utm_adset,utm_ad,url:location.href})});
+  /* ── Form submit (regular fetch, NOT no-cors → Make.com parses JSON properly) ── */
+  window.submitForm = function() {
+    var n   = (document.getElementById('f-name')     || {}).value || '';
+    var em  = (document.getElementById('f-email')    || {}).value || '';
+    var p   = (document.getElementById('f-phone')    || {}).value || '';
+    var loc = (document.getElementById('f-location') || {}).value || '';
+
+    if (!n.trim() || !em.trim() || !p.trim()) {
+      alert('Please fill in your name, email, and phone.');
+      return;
     }
-    document.getElementById('form-fields').style.display='none';
+
+    /* 24-hour lead dedup — same browser submits once per day */
+    if (alreadyLeadToday()) {
+      console.log('[HT] Lead already submitted in last 24h — skipping');
+      var fields = document.getElementById('form-fields');
+      var succ   = document.getElementById('form-success');
+      if (fields) fields.style.display = 'none';
+      if (succ) {
+        succ.innerHTML = '<div class="check">✅</div>'
+          + '<h3 style="color:var(--red2)">You\'re already booked!</h3>'
+          + '<p style="color:#bbb;margin-top:8px">We received your consultation request recently and our team will be in touch shortly. No need to submit again.</p>';
+        succ.classList.add('show');
+      }
+      return;
+    }
+
+    var btn = document.querySelector('.form-submit');
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', {
+        content_name: 'SMP Consultation Request',
+        content_category: 'Hair Loss / SMP',
+        currency: 'CAD'
+      });
+    }
+
+    fetch(MAKE_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:      n.trim(),
+        email:     em.trim(),
+        phone:     p.trim(),
+        location:  loc,
+        source:    utmSource(),
+        userId:    uid,
+        page:      PAGE_NAME,
+        timestamp: new Date().toISOString()
+      })
+    }).catch(function() {});
+
+    markLead();
+    document.getElementById('form-fields').style.display = 'none';
     document.getElementById('form-success').classList.add('show');
   };
 
-  /* ───────── scroll reveals ───────── */
-  var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});},{threshold:.12});
-  document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
-
-  /* ───────── header shadow on scroll ───────── */
-  var hdr=document.querySelector('.site-header');
-  window.addEventListener('scroll',function(){if(hdr){hdr.style.boxShadow=window.scrollY>10?'0 4px 20px rgba(0,0,0,.10)':'0 1px 12px rgba(0,0,0,.05)';}},{passive:true});
-
-  /* ───────── hero video mute toggle ───────── */
-  window.toggleMute=function(){
-    var hv=document.getElementById('hero-video');
-    var btn=document.getElementById('vid-mute');
-    if(!hv) return;
-    hv.muted=!hv.muted;
-    if(!hv.muted){ var p=hv.play(); if(p&&p.catch){p.catch(function(){});} }
-    if(btn){ btn.innerHTML = hv.muted ? '🔇 Tap for sound' : '🔊 Sound on'; }
+  /* ── Hero video mute toggle ── */
+  window.toggleMute = function() {
+    var hv  = document.getElementById('hero-video');
+    var btn = document.getElementById('vid-mute');
+    if (!hv) return;
+    hv.muted = !hv.muted;
+    if (!hv.muted) { var pp = hv.play(); if (pp && pp.catch) pp.catch(function(){}); }
+    if (btn) btn.innerHTML = hv.muted ? '🔇 Tap for sound' : '🔊 Sound on';
   };
 
-  /* ───────── boot ───────── */
-  function boot(){
-    barEl=document.getElementById('lcc-bar');
+  /* ── Scroll reveals ── */
+  var ro = new IntersectionObserver(function(es) {
+    es.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); }});
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+
+  /* ── Header shadow on scroll ── */
+  var hdr = document.querySelector('.site-header');
+  window.addEventListener('scroll', function() {
+    if (hdr) hdr.style.boxShadow = window.scrollY > 10
+      ? '0 4px 20px rgba(0,0,0,.10)'
+      : '0 1px 12px rgba(0,0,0,.05)';
+  }, { passive: true });
+
+  /* ── BOOT ── */
+  function boot() {
+    barEl = document.getElementById('lcc-bar');
+
+    /* Reliable autoplay for hero video + grid videos */
+    document.querySelectorAll('video[autoplay]').forEach(function(v) {
+      v.muted = true; v.defaultMuted = true; v.playsInline = true;
+      var go = function() { var p = v.play(); if (p && p.catch) p.catch(function(){}); };
+      go(); v.addEventListener('canplay', go, { once: true });
+      document.addEventListener('touchstart', go, { once: true });
+      document.addEventListener('click',      go, { once: true });
+    });
+
     startTimer();
-    // Force-start the hero video muted (required for autoplay across browsers)
-    document.querySelectorAll('video[autoplay]').forEach(function(v){
-      v.muted=true; v.defaultMuted=true; v.playsInline=true;
-      var go=function(){var p=v.play(); if(p&&p.catch){p.catch(function(){});}};
-      go(); v.addEventListener('canplay',go,{once:true});
-      document.addEventListener('touchstart',go,{once:true});
-      document.addEventListener('click',go,{once:true});
+
+    checkStatus(function(status) {
+      if (status === 'paused') {
+        console.log('[HT] Campaign paused — timer stopped');
+        pauseTimer();
+        viewDone = true;
+      }
     });
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+
 })();
 </script>
 </body>
