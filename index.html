@@ -727,12 +727,14 @@ a{color:inherit;text-decoration:none}
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   }
 
+  /* Only pause on actual tab visibility change (tab switch / minimize).
+     We deliberately do NOT listen for window blur — that fires whenever
+     focus moves to the address bar, DevTools, an extension, etc., which
+     was causing the timer to stop while the user was clearly still viewing. */
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) pauseTimer();
     else if (!viewDone) startTimer();
   });
-  window.addEventListener('blur',  function() { pauseTimer(); });
-  window.addEventListener('focus', function() { if (!viewDone) startTimer(); });
 
   /* ── Popup (shows on 25s qualified view OR on lead-already-today) ── */
   window.showPopup  = function() { var p = document.getElementById('lcc-popup'); if (p) { p.style.display = 'flex';  document.body.style.overflow = 'hidden'; }};
@@ -836,9 +838,12 @@ a{color:inherit;text-decoration:none}
 
     checkStatus(function(status) {
       if (status === 'paused') {
-        console.log('[HT] Campaign paused — timer stopped');
-        pauseTimer();
+        console.log('[HT] Campaign paused — bar still animates, but view will NOT be counted');
+        // Keep the timer + bar visually running for normal UX.
+        // Only set viewDone=true so logView() and showPopup() are skipped at the 25s mark.
         viewDone = true;
+      } else {
+        console.log('[HT] Campaign active — view tracking enabled');
       }
     });
   }
