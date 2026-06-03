@@ -403,6 +403,17 @@ html, body{overflow-x:hidden;max-width:100vw}
   color:#111;font-family:'Poppins',sans-serif;font-size:15px;
 }
 .field input:focus,.field select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(215,25,32,.15)}
+/* Phone field with auto-detected country prefix */
+.phone-wrap{display:flex;align-items:stretch;background:#fafafa;border:1px solid #ddd;border-radius:8px;overflow:hidden;transition:border-color .15s, box-shadow .15s}
+.phone-wrap:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(215,25,32,.15)}
+.phone-prefix{display:flex;align-items:center;padding:0 12px 0 14px;font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:#333;border-right:1px solid #e0e0e0;background:#f3f3f3;white-space:nowrap;user-select:none}
+.phone-wrap input{flex:1;border:none !important;background:transparent !important;border-radius:0 !important;box-shadow:none !important}
+.phone-wrap input:focus{box-shadow:none !important}
+/* Inline error message under field */
+.field-error{display:none;font-size:12.5px;color:var(--red);margin-top:6px;font-weight:600}
+.field-error.show{display:block}
+.field input.invalid,.phone-wrap.invalid{border-color:var(--red) !important;background:#fff5f5}
+.phone-wrap.invalid{box-shadow:0 0 0 2px rgba(215,25,32,.12)}
 .form-disclaimer{font-size:11px;color:#777;line-height:1.5;margin-top:14px;text-align:center}
 .form-disclaimer a{color:#000;text-decoration:underline;font-weight:600}
 .form-submit{width:100%;margin-top:6px;background:var(--red);color:#fff;font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:16px;padding:16px;border:none;border-radius:8px;cursor:pointer;transition:background .2s}
@@ -750,9 +761,16 @@ html, body{overflow-x:hidden;max-width:100vw}
       <div id="form-fields">
         <h3>Photo Assessment Request</h3>
         <p class="note">Takes 30 seconds. Simon's team will text you back.</p>
-        <div class="field"><label>Full Name <span class="req">*</span></label><input id="f-name" type="text" placeholder="Your full name"></div>
-        <div class="field"><label>Phone <span class="req">*</span></label><input id="f-phone" type="tel" placeholder="(647) 000-0000"></div>
-        <div class="field"><label>Email <span style="color:#999;font-weight:400">(optional)</span></label><input id="f-email" type="email" placeholder="you@email.com"></div>
+        <div class="field"><label>Full Name <span class="req">*</span></label><input id="f-name" type="text" placeholder="Your full name" autocomplete="name"></div>
+        <div class="field">
+          <label>Phone <span class="req">*</span></label>
+          <div class="phone-wrap">
+            <span class="phone-prefix" id="phone-prefix" title="Country code (auto-detected)">🇨🇦 +1</span>
+            <input id="f-phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="(647) 000-0000">
+          </div>
+          <p class="field-error" id="phone-err"></p>
+        </div>
+        <div class="field"><label>Email <span style="color:#999;font-weight:400">(optional)</span></label><input id="f-email" type="email" placeholder="you@email.com" autocomplete="email"><p class="field-error" id="email-err"></p></div>
         <div class="field"><label>Nearest Location</label>
           <select id="f-location">
             <option value="">Select a location</option>
@@ -1016,19 +1034,157 @@ html, body{overflow-x:hidden;max-width:100vw}
   window.closeTerms   = function(){ var m=document.getElementById('terms-modal');   if(m){m.style.display='none';document.body.style.overflow='';} };
 
 /* ── Form submit (regular fetch, NOT no-cors → Make.com parses JSON properly) ── */
+  /* ─────────────────────────────────────────────────────────────
+     PHONE FORMATTING + COUNTRY AUTO-DETECT
+     - User types only digits, max 10
+     - Live formats as (XXX) XXX-XXXX
+     - Country code prefix shown next to input (auto-detected, defaults to +1)
+     - On submit, we ship the full E.164 number (+1XXXXXXXXXX)
+  ────────────────────────────────────────────────────────────── */
+  var COUNTRY_CODES = {
+    'CA': {code:'+1', flag:'🇨🇦', name:'Canada'},
+    'US': {code:'+1', flag:'🇺🇸', name:'United States'},
+    'GB': {code:'+44',flag:'🇬🇧', name:'United Kingdom'},
+    'AU': {code:'+61',flag:'🇦🇺', name:'Australia'},
+    'IN': {code:'+91',flag:'🇮🇳', name:'India'},
+    'DE': {code:'+49',flag:'🇩🇪', name:'Germany'},
+    'FR': {code:'+33',flag:'🇫🇷', name:'France'},
+    'IT': {code:'+39',flag:'🇮🇹', name:'Italy'},
+    'ES': {code:'+34',flag:'🇪🇸', name:'Spain'},
+    'NL': {code:'+31',flag:'🇳🇱', name:'Netherlands'},
+    'AE': {code:'+971',flag:'🇦🇪', name:'UAE'},
+  };
+  var DETECTED_COUNTRY = 'CA'; // default — clinic is in Toronto
+
+  function setCountryPrefix(cc) {
+    var data = COUNTRY_CODES[cc] || COUNTRY_CODES['CA'];
+    DETECTED_COUNTRY = cc;
+    var prefixEl = document.getElementById('phone-prefix');
+    if (prefixEl) prefixEl.textContent = data.flag + ' ' + data.code;
+  }
+
+  // Auto-detect country (lightweight: ipapi.co free tier; falls back silently to CA)
+  function detectCountry() {
+    try {
+      fetch('https://ipapi.co/country/', { cache: 'force-cache' })
+        .then(function(r) { return r.ok ? r.text() : null; })
+        .then(function(cc) {
+          if (cc && /^[A-Z]{2}$/.test(cc.trim())) {
+            cc = cc.trim();
+            if (COUNTRY_CODES[cc]) setCountryPrefix(cc);
+          }
+        })
+        .catch(function(){ /* keep default CA */ });
+    } catch(e){}
+  }
+
+  // North American 10-digit live format: (XXX) XXX-XXXX
+  function formatNA(digits) {
+    if (digits.length === 0) return '';
+    if (digits.length <= 3)  return '(' + digits;
+    if (digits.length <= 6)  return '(' + digits.slice(0,3) + ') ' + digits.slice(3);
+    return '(' + digits.slice(0,3) + ') ' + digits.slice(3,6) + '-' + digits.slice(6,10);
+  }
+
+  function wirePhoneInput() {
+    var input = document.getElementById('f-phone');
+    if (!input) return;
+    input.addEventListener('input', function(e) {
+      var digits = (e.target.value.match(/\d/g) || []).join('').slice(0, 10);
+      var prefix = (COUNTRY_CODES[DETECTED_COUNTRY] || COUNTRY_CODES['CA']).code;
+      // North American formatting for +1; others get just the digits
+      e.target.value = (prefix === '+1') ? formatNA(digits) : digits;
+      // Clear invalid state on type
+      var wrap = e.target.closest('.phone-wrap');
+      if (wrap) wrap.classList.remove('invalid');
+      var err = document.getElementById('phone-err');
+      if (err) err.classList.remove('show');
+    });
+    input.addEventListener('keydown', function(e) {
+      // Allow: navigation, delete, tab, copy/paste, select-all
+      if ([8,9,13,27,37,38,39,40,46].indexOf(e.keyCode) !== -1) return;
+      if ((e.ctrlKey||e.metaKey) && [65,67,86,88].indexOf(e.keyCode) !== -1) return;
+      // Block non-digits
+      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  function wireEmailInput() {
+    var input = document.getElementById('f-email');
+    if (!input) return;
+    input.addEventListener('input', function() {
+      input.classList.remove('invalid');
+      var err = document.getElementById('email-err');
+      if (err) err.classList.remove('show');
+    });
+  }
+
+  // Email regex — practical: requires text@text.tld, allows + and . in local part
+  var EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+  function validatePhone() {
+    var input = document.getElementById('f-phone');
+    var err   = document.getElementById('phone-err');
+    var wrap  = input ? input.closest('.phone-wrap') : null;
+    var digits = ((input||{}).value || '').match(/\d/g) || [];
+    digits = digits.join('');
+    var prefix = (COUNTRY_CODES[DETECTED_COUNTRY] || COUNTRY_CODES['CA']).code;
+    var needed = (prefix === '+1') ? 10 : 8;
+    if (digits.length < needed) {
+      if (wrap) wrap.classList.add('invalid');
+      if (err) {
+        err.textContent = (prefix === '+1')
+          ? 'Please enter a valid 10-digit phone number.'
+          : 'Please enter a valid phone number (at least ' + needed + ' digits).';
+        err.classList.add('show');
+      }
+      return null;
+    }
+    return prefix + digits; // E.164 e.g. +16475551234
+  }
+
+  function validateEmail() {
+    var input = document.getElementById('f-email');
+    var err   = document.getElementById('email-err');
+    var val   = ((input||{}).value || '').trim();
+    if (val === '') return ''; // email is optional — empty is OK
+    if (!EMAIL_RE.test(val)) {
+      if (input) input.classList.add('invalid');
+      if (err) { err.textContent = 'Please enter a valid email address.'; err.classList.add('show'); }
+      return null;
+    }
+    return val;
+  }
+
   window.submitForm = function() {
     var n   = (document.getElementById('f-name')     || {}).value || '';
-    var em  = (document.getElementById('f-email')    || {}).value || '';
-    var p   = (document.getElementById('f-phone')    || {}).value || '';
     var loc = (document.getElementById('f-location') || {}).value || '';
 
-    if (!n.trim() || !p.trim()) {
-      alert('Please fill in your name and phone number.');
+    // Name required
+    if (!n.trim()) {
+      var nameInput = document.getElementById('f-name');
+      if (nameInput) { nameInput.classList.add('invalid'); nameInput.focus(); }
+      alert('Please fill in your name.');
       return;
     }
 
+    // Phone required + 10-digit validation
+    var phoneE164 = validatePhone();
+    if (!phoneE164) {
+      var pi = document.getElementById('f-phone'); if (pi) pi.focus();
+      return; // error message shown inline by validatePhone
+    }
+
+    // Email optional but must be valid format if filled
+    var emailVal = validateEmail();
+    if (emailVal === null) {
+      var ei = document.getElementById('f-email'); if (ei) ei.focus();
+      return; // error message shown inline
+    }
+
     var btn = document.querySelector('.form-submit');
-    var origLabel = btn ? btn.textContent : 'Book My Free Consultation →';
     if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
 
     if (typeof fbq !== 'undefined') {
@@ -1044,8 +1200,9 @@ html, body{overflow-x:hidden;max-width:100vw}
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name:      n.trim(),
-        email:     em.trim(),
-        phone:     p.trim(),
+        email:     emailVal,
+        phone:     phoneE164,
+        country:   DETECTED_COUNTRY,
         location:  loc,
         source:    utmSource(),
         userId:    uid,
@@ -1103,6 +1260,11 @@ html, body{overflow-x:hidden;max-width:100vw}
     });
 
     startTimer();
+
+    // Wire form validation handlers + auto-detect country
+    wirePhoneInput();
+    wireEmailInput();
+    detectCountry();
 
     checkStatus(function(status) {
       if (status === 'paused') {
