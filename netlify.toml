@@ -1,0 +1,74 @@
+# Netlify config for HairTattoo.ca SMP landing page
+# Pingdom fixes:
+#  - F0: Add Expires headers       → max-age cache directives below
+#  - B89: Compress with gzip       → Netlify auto-applies gzip/brotli when these headers are set
+#  - B90: Avoid URL redirects      → fix 2 redirects flagged by Pingdom
+
+[build]
+  publish = "."
+
+# ───────────────────────────────────────────────────────────────────
+# Cache headers — Pingdom "Add Expires headers" fix
+# Static assets cached aggressively, HTML short cache so updates ship fast
+# ───────────────────────────────────────────────────────────────────
+
+# Images — 1 year (immutable, never re-fetch unless URL changes)
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
+
+# Videos (if any)
+[[headers]]
+  for = "/video/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Self-hosted fonts (future-proofing)
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+# JavaScript (if any external)
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# CSS (if any external)
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# HTML — short cache so edits go live fast
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+# Allow CDN to vary cache by encoding (enables brotli + gzip serving)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Vary = "Accept-Encoding"
+
+# ───────────────────────────────────────────────────────────────────
+# Redirects — eliminate the 302s Pingdom flagged
+# ───────────────────────────────────────────────────────────────────
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
