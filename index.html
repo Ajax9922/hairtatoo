@@ -53,7 +53,7 @@ src="https://www.facebook.com/tr?id=1700617311253230&ev=PageView&noscript=1"/></
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -73,6 +73,7 @@ html{scroll-behavior:smooth}
 
 /* ── 3-BUCKET ── */
 .buckets{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:760px){.buckets{grid-template-columns:1fr;gap:14px}.bucket-card{padding:24px 22px}.bucket-card h3{font-size:17px}.bucket-card p{font-size:14px}}
 .bucket-card{background:#fff;border:1px solid #e7e7e7;border-radius:14px;padding:28px 24px;text-align:center;transition:transform .2s,box-shadow .2s;box-shadow:0 6px 20px rgba(0,0,0,.04)}
 .bucket-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.1)}
 .bucket-card .b-ic{font-size:38px;margin-bottom:14px}
@@ -137,7 +138,10 @@ a{color:inherit;text-decoration:none}
   display:flex;align-items:center;
   padding:96px 28px 88px;
   overflow:hidden;
-  background:#ffffff;
+  background:
+    radial-gradient(ellipse at top left, rgba(215,25,32,0.05), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(0,0,0,0.04), transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
   border-bottom:1px solid #f0f0f0;
 }
 .hero::before{display:none;}
@@ -212,20 +216,8 @@ a{color:inherit;text-decoration:none}
 html, body{overflow-x:hidden;max-width:100vw}
 .wrap, .hero, section, footer{max-width:100vw;overflow-x:hidden}
 
-/* Hero credibility image (below transformation) */
-.hero-credibility{
-  margin:16px auto 0;
-  max-width:760px;
-  width:100%;
-  border-radius:14px;
-  overflow:hidden;
-  border:1px solid #e7e7e7;
-  box-shadow:0 8px 24px rgba(0,0,0,.06);
-}
-.hero-credibility img{width:100%;height:auto;display:block}
-
 .hero-showcase{
-  position:relative;margin:42px auto 0;width:100%;max-width:880px;
+  position:relative;margin:24px auto 0;width:100%;max-width:880px;
   border-radius:18px;overflow:hidden;
   border:1px solid #e7e7e7;
   box-shadow:0 30px 80px rgba(0,0,0,.12);
@@ -265,7 +257,7 @@ html, body{overflow-x:hidden;max-width:100vw}
 .s-head{text-align:center;margin-bottom:52px}
 .s-label{font-family:'Montserrat',sans-serif;font-weight:800;font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:#000;margin-bottom:12px}
 .s-title{font-size:clamp(30px,4.5vw,48px);text-transform:uppercase;color:var(--charcoal)}
-.s-title .accent{color:#000;border-bottom:3px solid var(--red);padding-bottom:2px}
+.s-title .accent{color:#000;text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:3px;text-underline-offset:5px}
 .s-sub{max-width:680px;margin:16px auto 0;color:var(--grey);font-size:17px}
 .s-sub{color:var(--grey)}
 .divider{width:48px;height:3px;background:#000;margin:18px auto 0;border-radius:2px}
@@ -457,7 +449,7 @@ html, body{overflow-x:hidden;max-width:100vw}
     <div class="tag">Free Consultation</div>
     <div class="save">12 Months <small>FREE TOUCHUPS</small></div>
     <p class="sub">Every HairTattoo.ca client gets <strong>12 months of free touchups</strong> after their treatment. Book your free consultation today.</p>
-    <a href="tel:+16476929114" class="pbtn red" onclick="trackCall('popup');closePopup()">📞 Call Anytime — (647) 692-9114</a>
+    <a href="tel:+16476929114" class="pbtn red" onclick="trackCall('popup');closePopup()"><svg style="vertical-align:-3px;margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.58l2.2-2.21a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1z"/></svg> Call Anytime — (647) 692-9114</a>
     <p class="fine">Free, no-obligation consultation. Trained by Ian Watson, inventor of SMP.</p>
   </div>
 </div>
@@ -485,19 +477,20 @@ html, body{overflow-x:hidden;max-width:100vw}
       <p class="special-offer-line">🎁 <strong>FREE Consultation</strong> — Call Now &amp; Mention <em>"Special Offer"</em></p>
       <div class="cta-row cta-inline">
         <a href="#consult-form" class="btn btn-ghost">📸 Photo Assess</a>
-        <a href="tel:+16476929114" class="btn btn-red" onclick="trackCall('hero')">📞 Call Now</a>
+        <a href="tel:+16476929114" class="btn btn-red" onclick="trackCall('hero')"><svg style="vertical-align:-3px;margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.58l2.2-2.21a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1z"/></svg> Call Now</a>
       </div>
     </div>
 
-    <!-- HERO TRANSFORMATION IMAGE 1 — 3-stage transformation -->
+    <!-- HERO IMAGE 1 (now first) — crown view before/after -->
     <figure class="hero-showcase">
-      <span class="show-tag">Real Client · Before → Design → After</span>
-      <img class="hero-video-feat" src="/img/transformation-3stage.jpg" alt="SMP 3-stage transformation: before, custom hairline design, finished natural result">
+      <img class="hero-video-feat" src="/img/smp-hero-2.jpg" alt="SMP crown view — before and after" width="880" height="450" decoding="async">
+      <figcaption class="hero-cap">Crown View · Before → After</figcaption>
     </figure>
 
-    <!-- HERO IMAGE 2 — before/after crown view -->
-    <figure class="hero-credibility">
-      <img src="/img/smp-hero-2.jpg" alt="SMP before and after — crown view showing pigment coverage">
+    <!-- HERO IMAGE 2 (now second) — full 3-stage transformation -->
+    <figure class="hero-showcase">
+      <img class="hero-video-feat" src="/img/transformation-3stage.jpg" alt="SMP 3-stage transformation: before, custom hairline design, finished natural result" width="880" height="330" loading="lazy" decoding="async">
+      <figcaption class="hero-cap">Real Client · Before → Design → After</figcaption>
     </figure>
   </div>
 </section>
@@ -543,34 +536,19 @@ html, body{overflow-x:hidden;max-width:100vw}
       <p class="s-sub">Natural, undetectable density at conversational distance — the look of a closely-shaved, full head of hair.</p>
     </div>
     <div class="ba-grid">
-      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets5.jpg" alt="SMP before and after"><div class="ba-cap"><span class="cat-badge">Receding Hairline</span>Receding hairline rebuilt with a natural, defined front line.</div></div>
-      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets.jpg" alt="SMP before and after"><div class="ba-cap"><span class="cat-badge">Full Coverage</span>Full scalp restoration with a dense, realistic follicle field.</div></div>
-      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20for%20women%20(9).jpg" alt="SMP density shading for women"><div class="ba-cap"><span class="cat-badge">Women · Thinning</span>SMP density shading for women with diffuse thinning.</div></div>
-      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets7.jpg" alt="SMP before and after"><div class="ba-cap"><span class="cat-badge">Crown Restoration</span>Crown density and definition using the original SMP technique.</div></div>
-      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets%208.jpg" alt="SMP scar camouflage"><div class="ba-cap"><span class="cat-badge">Transplant Scar</span>FUE hair-transplant scar camouflaged and blended.</div></div>
-      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets%2010.jpg" alt="SMP scar camouflage"><div class="ba-cap"><span class="cat-badge">Scar Concealment</span>Scar concealment and added density across the scalp.</div></div>
-      <div class="ba-card"><img class="ba-single" src="/img/hair-tattoo-before-and-after-SMP-Toronto.jpg" alt="SMP before and after — hairline restoration"><div class="ba-cap"><span class="cat-badge">Hairline Restoration</span>Hairline restoration — Toronto GTA's scalp micropigmentation specialists.</div></div>
-      <div class="ba-card"><img class="ba-single" src="/img/hairline-tattoo.jpg" alt="SMP before and after — crown density"><div class="ba-cap"><span class="cat-badge">Crown Density</span>Discover the benefits of SMP — fuller density across the crown.</div></div>
-      <div class="ba-card"><img class="ba-single" src="/img/scalp-micropigmentation-Toronto-hair-tattoo-1024x697-1.jpg" alt="SMP before and after — full coverage profile"><div class="ba-cap"><span class="cat-badge">Full Profile</span>Natural full-coverage result, seamless from every angle.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets5.jpg" alt="SMP before and after" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Receding Hairline</span>Receding hairline rebuilt with a natural, defined front line.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets.jpg" alt="SMP before and after" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Full Coverage</span>Full scalp restoration with a dense, realistic follicle field.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20for%20women%20(9).jpg" alt="SMP density shading for women" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Women · Thinning</span>SMP density shading for women with diffuse thinning.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets7.jpg" alt="SMP before and after" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Crown Restoration</span>Crown density and definition using the original SMP technique.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets%208.jpg" alt="SMP scar camouflage" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Transplant Scar</span>FUE hair-transplant scar camouflaged and blended.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/scalp%20micropigmentation%20regrets%2010.jpg" alt="SMP scar camouflage" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Scar Concealment</span>Scar concealment and added density across the scalp.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/hair-tattoo-before-and-after-SMP-Toronto.jpg" alt="SMP before and after — hairline restoration" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Hairline Restoration</span>Hairline restoration — Toronto GTA's scalp micropigmentation specialists.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/hairline-tattoo.jpg" alt="SMP before and after — crown density" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Crown Density</span>Discover the benefits of SMP — fuller density across the crown.</div></div>
+      <div class="ba-card"><img class="ba-single" src="/img/scalp-micropigmentation-Toronto-hair-tattoo-1024x697-1.jpg" alt="SMP before and after — full coverage profile" loading="lazy" decoding="async"><div class="ba-cap"><span class="cat-badge">Full Profile</span>Natural full-coverage result, seamless from every angle.</div></div>
     </div>
   </div>
 </section>
 
-
-<!-- ══ VIDEO ══ -->
-<section class="reveal section" id="video">
-  <div class="wrap">
-    <div class="s-head">
-      <p class="s-label">Watch</p>
-      <h2 class="s-title">See the <span class="accent">Transformation</span></h2>
-      <div class="divider"></div>
-      <p class="s-sub">A real look at our Scalp Micropigmentation work and what to expect.</p>
-    </div>
-    <div class="video-wrap">
-      <iframe src="https://www.youtube.com/embed/P-AVk-uKkG4" title="HairTattoo.ca SMP" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>
-  </div>
-</section>
 
 <!-- ══ TECHNIQUE / HOW IT WORKS ══ -->
 <section class="reveal section" id="how">
@@ -662,17 +640,9 @@ html, body{overflow-x:hidden;max-width:100vw}
     </div>
     <div style="text-align:center;margin-top:40px">
       <p style="color:#666;margin-bottom:18px;font-size:16px">Have a different question? Call us anytime.</p>
-      <a href="tel:+16476929114" class="btn btn-red" onclick="trackCall('faq-bottom')">📞 Call (647) 692-9114</a>
+      <a href="tel:+16476929114" class="btn btn-red" onclick="trackCall('faq-bottom')"><svg style="vertical-align:-3px;margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.58l2.2-2.21a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1z"/></svg> Call (647) 692-9114</a>
     </div>
   </div>
-</section>
-
-<!-- ══ OFFER STRIP ══ -->
-<section class="offer-strip">
-  <div class="tag">Every HairTattoo.ca Client Gets</div>
-  <div class="save">12 Months <small>FREE TOUCHUPS</small></div>
-  <div class="meta">Unlimited support throughout your SMP journey · 60% off touchups after Year 1</div>
-  <a href="tel:+16476929114" class="btn" onclick="trackCall('offer-strip')">📞 Call to Learn More</a>
 </section>
 
 <!-- ══ SPECIALIST ══ -->
@@ -690,23 +660,6 @@ html, body{overflow-x:hidden;max-width:100vw}
   </div>
 </section>
 
-<!-- ══ REVIEWS ══ -->
-<section class="reveal section" id="reviews">
-  <div class="wrap">
-    <div class="s-head">
-      <p class="s-label">5-Star Reviews</p>
-      <h2 class="s-title">What Clients <span class="accent">Say</span></h2>
-      <div class="divider"></div>
-      <p class="s-sub">Hundreds of 5-star reviews from clients across Toronto &amp; the GTA. Read a few below.</p>
-    </div>
-    <div class="reviews">
-      <div class="review"><div class="stars">★★★★★</div><p>"Simon answered all my questions about SMP and the process. He's super kind, patient, and very meticulous with his work. I'm incredibly happy with my results and the pricing is very affordable. Highly recommend Simon for anyone considering SMP."</p><div class="who">— Matthew Agueci · Google Review</div></div>
-      <div class="review"><div class="stars">★★★★★</div><p>"Though HairTattoo was my second choice for a full Norwood-7 SMP, I'm glad I chose this studio. Simon assured me he'd continue to work until I was completely satisfied. Punctual, professional, courteous, and patient throughout."</p><div class="who">— Aquil Ali · Google Review</div></div>
-      <div class="review"><div class="stars">★★★★★</div><p>"I had a small bald patch in the back of my head due to Alopecia — Simon was able to fill it out, blend it in with the rest of my hair, and make it look as real as possible. He immediately put me at ease. Would 100% recommend."</p><div class="who">— Gabriel Ho · Google Review</div></div>
-    </div>
-  </div>
-</section>
-
 <!-- ══ FORM ══ -->
 <section class="form-section" id="consult-form">
   <div class="form-grid">
@@ -716,7 +669,7 @@ html, body{overflow-x:hidden;max-width:100vw}
       <p>Prefer to start with a photo? Leave your details and Simon's team will text you back fast with a personalized assessment of what SMP can do for your hair-loss pattern.</p>
       <p style="color:#000;font-weight:600">Want to talk now? Call anytime — we usually pick up.</p>
       <p class="offer-line">Trained by Ian Watson · Canada's first SMP clinic · 12 months free touchups</p>
-      <p style="color:#888;font-size:14px">Or call us directly: <a href="tel:+16476929114" onclick="trackCall('form-copy')" style="color:#fff;font-weight:700">(647) 692-9114</a></p>
+      <p style="color:#555;font-size:14px;margin-top:14px">Or call us directly: <a href="tel:+16476929114" onclick="trackCall('form-copy')" style="color:var(--red);font-weight:800;text-decoration:none">(647) 692-9114</a></p>
     </div>
     <div class="form-card">
       <div id="form-fields">
@@ -826,7 +779,7 @@ html, body{overflow-x:hidden;max-width:100vw}
 
 <div class="float-group">
   <a href="#consult-form" class="float-btn float-inquire">📸 Inquire</a>
-  <a href="tel:+16476929114" class="float-btn float-call" onclick="trackCall('float')">📞 Call Now</a>
+  <a href="tel:+16476929114" class="float-btn float-call" onclick="trackCall('float')"><svg style="vertical-align:-3px;margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.58l2.2-2.21a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1z"/></svg> Call Now</a>
 </div>
 
 <script>
