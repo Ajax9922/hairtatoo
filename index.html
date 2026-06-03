@@ -210,11 +210,33 @@ a{color:inherit;text-decoration:none}
   .hero-text .cta-row{justify-content:flex-start}
   .hero-h1-tight{font-size:48px !important;line-height:1.05}
   /* Both images stack in right column */
-  .hero-inner > figure.hero-showcase{grid-column:2;margin-top:0;max-width:none}
+  .hero-inner > figure.hero-showcase{grid-column:2;margin-top:0;max-width:none;text-align:center}
   .hero-inner > figure.hero-showcase:nth-of-type(1){grid-row:1}
   .hero-inner > figure.hero-showcase:nth-of-type(2){grid-row:2}
+  /* Caption text always centered under image, even on desktop */
+  .hero-inner .hero-cap{text-align:center !important}
   /* Pin floating CTA group visible on desktop too */
   .float-group{display:flex !important}
+}
+
+/* ── Floating CTA attention pulse — runs every 4s, draws the eye ── */
+@keyframes float-attention-pulse {
+  0%, 80%, 100% { transform: scale(1); }
+  84% { transform: scale(1.08) translateY(-2px); }
+  88% { transform: scale(0.97) translateY(1px); }
+  92% { transform: scale(1.05) translateY(-1px); }
+  96% { transform: scale(1) translateY(0); }
+}
+@keyframes float-glow-pulse {
+  0%, 80%, 100% { box-shadow: 0 8px 22px rgba(215,25,32,.45); }
+  88%          { box-shadow: 0 12px 36px rgba(215,25,32,.75), 0 0 0 6px rgba(215,25,32,.12); }
+}
+.float-call{animation: float-attention-pulse 4s ease-in-out infinite, float-glow-pulse 4s ease-in-out infinite}
+.float-inquire{animation: float-attention-pulse 4s ease-in-out infinite; animation-delay: .35s}
+.float-btn:hover{animation-play-state: paused}
+/* Respect users who prefer reduced motion */
+@media(prefers-reduced-motion: reduce){
+  .float-call, .float-inquire{animation: none}
 }
 
 @media(max-width:760px){
