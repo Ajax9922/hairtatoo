@@ -975,7 +975,6 @@ html, body{overflow-x:hidden;max-width:100vw}
 
   function rafLoop(now) {
     if (!running) return;
-    if (document.hidden || document.visibilityState !== 'visible') { pauseTimer(); return; }
     var secondsSoFar = elapsed + (now - startedAt) / 1000;
     var pct = Math.min((secondsSoFar / SECONDS) * 100, 100);
     if (barEl) barEl.style.width = pct.toFixed(3) + '%';
@@ -995,6 +994,7 @@ html, body{overflow-x:hidden;max-width:100vw}
 
   function startTimer() {
     if (running || viewDone) return;
+    if (document.hidden) return; // don't start while hidden — visibilitychange will restart later
     running = true;
     startedAt = performance.now();
     rafId = requestAnimationFrame(rafLoop);
@@ -1007,14 +1007,24 @@ html, body{overflow-x:hidden;max-width:100vw}
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   }
 
+  /* Resume helper — only restart if tab is actually visible right now
+     (avoids race when focus event fires before document.hidden updates) */
+  function resumeIfVisible() {
+    if (viewDone) return;
+    if (document.hidden) return;
+    startTimer();
+  }
+
   /* Pause on tab visibility change (tab switch / minimize)
-     AND on window blur (alt-tab to another app/window) — mirrors the proven nail fungus pattern. */
+     AND on window blur (alt-tab to another app/window).
+     Resume on: visibilitychange-visible, focus, AND pageshow (mobile back-button). */
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) pauseTimer();
-    else if (!viewDone) startTimer();
+    else resumeIfVisible();
   });
-  window.addEventListener('blur',  function() { pauseTimer(); });
-  window.addEventListener('focus', function() { if (!viewDone) startTimer(); });
+  window.addEventListener('blur',     function() { pauseTimer(); });
+  window.addEventListener('focus',    function() { resumeIfVisible(); });
+  window.addEventListener('pageshow', function() { resumeIfVisible(); });
 
   /* ── Popup (shows on 25s qualified view OR on lead-already-today) ── */
   window.showPopup  = function() { var p = document.getElementById('lcc-popup'); if (p) { p.style.display = 'flex';  document.body.style.overflow = 'hidden'; }};
