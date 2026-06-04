@@ -525,19 +525,40 @@ html, body{overflow-x:hidden;max-width:100vw}
 </style>
 </head>
 <body>
+
+<!-- ═════════════════════════════════════════════════════════════════
+     MICROSOFT CLARITY — Free session recording + heatmaps + click maps
+     SETUP (5 min):
+       1) Go to https://clarity.microsoft.com and sign up (free)
+       2) Create project "HairTattoo.ca"
+       3) Copy your Project ID (it's a short string like "abc123xyz")
+       4) Replace YOUR_CLARITY_ID_HERE below with that ID
+       5) After 30 min of traffic, watch real user session replays
+     This lets you SEE what visitors do after the 25s mark.
+═════════════════════════════════════════════════════════════════ -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "YOUR_CLARITY_ID_HERE");
+</script>
+
 <div id="lcc-bar-wrap"><div id="lcc-bar"></div></div>
 
 <!-- ══ 25-second discount popup ══ -->
 <div id="lcc-popup">
   <div class="card">
     <button class="x" onclick="closePopup()">&times;</button>
-    <div class="tag">Free Consultation</div>
-    <div class="save">12 Months <small>FREE TOUCHUPS</small></div>
-    <p class="sub">Every HairTattoo.ca client gets <strong>12 months of free touchups</strong> after their treatment. Book your free consultation today.</p>
-    <a href="tel:+16476929114" class="pbtn red" onclick="trackCall('popup');closePopup()"><svg style="vertical-align:-3px;margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.58l2.2-2.21a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1z"/></svg> Call Anytime — (647) 692-9114</a>
-    <p class="fine">Free, no-obligation consultation. Trained by Ian Watson, inventor of SMP.</p>
+    <div class="tag">LIMITED TIME · ENDS JUNE 15</div>
+    <div class="save">$400 <small>OFF</small></div>
+    <p class="sub">Book your <strong>free consultation by June 15</strong> and save $400 on your SMP treatment. Get a personalized plan, pricing, and timeline in one quick call.</p>
+    <a href="tel:+16476929114" class="pbtn red" onclick="trackCall('popup');closePopup()"><svg style="vertical-align:-3px;margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.58l2.2-2.21a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1z"/></svg> Call Now to Save — (647) 692-9114</a>
+    <p class="fine">Plus <strong>12 months of free touchups</strong> for every client. Canada's first SMP clinic — trained by Ian Watson, inventor of SMP. <em>Offer valid until June 15, 2026.</em></p>
   </div>
 </div>
+
+
 
 <!-- ══ HEADER ══ -->
 <header class="site-header">
@@ -560,7 +581,7 @@ html, body{overflow-x:hidden;max-width:100vw}
         <span class="dot"></span>
         <span class="items">Non-surgical · No scars · No downtime</span>
       </div>
-      <p class="special-offer-line">🎁 <strong>FREE Consultation</strong> — Call Now</p>
+      <p class="special-offer-line">🎁 <strong>$400 OFF</strong> — Valid till June 15 · <em>Call Now to Save Today</em></p>
       <div class="cta-row cta-inline">
         <a href="#consult-form" class="btn btn-ghost">📸 Photo Assess</a>
         <a href="tel:+16476929114" class="btn btn-red" onclick="trackCall('hero')"><svg style="vertical-align:-3px;margin-right:4px" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 0 0-1.02.24l-2.2 2.2a15.05 15.05 0 0 1-6.59-6.58l2.2-2.21a1 1 0 0 0 .25-1.02A11.36 11.36 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1 17 17 0 0 0 17 17 1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1z"/></svg> Call Now</a>
@@ -947,13 +968,6 @@ html, body{overflow-x:hidden;max-width:100vw}
       return;
     }
     markViewed();
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'ViewContent', {
-        content_name: 'SMP HairTattoo Landing',
-        content_category: 'Hair Loss / SMP',
-        currency: 'CAD'
-      });
-    }
     var src = GS_URL
       + '?action=view'
       + '&page='   + encodeURIComponent(PAGE_NAME)
@@ -973,17 +987,34 @@ html, body{overflow-x:hidden;max-width:100vw}
   var running   = false;
   var rafId     = null;
 
+  // ── Smooth bar via requestAnimationFrame ─────────────────
+  // Uses real elapsed time — buttery smooth, no jank
   function rafLoop(now) {
     if (!running) return;
+    if (document.hidden || document.visibilityState !== 'visible') {
+      pauseTimer();
+      return;
+    }
     var secondsSoFar = elapsed + (now - startedAt) / 1000;
     var pct = Math.min((secondsSoFar / SECONDS) * 100, 100);
+
+    // Update bar width directly — no transition needed, rAF is smooth
     if (barEl) barEl.style.width = pct.toFixed(3) + '%';
+
     if (secondsSoFar >= SECONDS) {
       running = false;
       elapsed = SECONDS;
       if (barEl) barEl.style.width = '100%';
       if (!viewDone) {
         viewDone = true;
+        // Facebook ViewContent event (25s qualified view)
+        if (typeof fbq !== 'undefined') {
+          fbq('track', 'ViewContent', {
+            content_name: 'SMP HairTattoo Page',
+            content_category: 'Hair Loss / SMP',
+            currency: 'CAD'
+          });
+        }
         logView();
         showPopup();
       }
@@ -994,37 +1025,30 @@ html, body{overflow-x:hidden;max-width:100vw}
 
   function startTimer() {
     if (running || viewDone) return;
-    if (document.hidden) return; // don't start while hidden — visibilitychange will restart later
-    running = true;
+    running   = true;
     startedAt = performance.now();
-    rafId = requestAnimationFrame(rafLoop);
+    rafId     = requestAnimationFrame(rafLoop);
   }
 
   function pauseTimer() {
     if (!running) return;
-    running = false;
+    running  = false;
+    // Accumulate elapsed seconds so far
     elapsed += (performance.now() - startedAt) / 1000;
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   }
 
-  /* Resume helper — only restart if tab is actually visible right now
-     (avoids race when focus event fires before document.hidden updates) */
-  function resumeIfVisible() {
-    if (viewDone) return;
-    if (document.hidden) return;
-    startTimer();
-  }
-
-  /* Pause on tab visibility change (tab switch / minimize)
-     AND on window blur (alt-tab to another app/window).
-     Resume on: visibilitychange-visible, focus, AND pageshow (mobile back-button). */
+  // Tab focus/blur events — BOTH visibilitychange AND focus/blur for reliability
   document.addEventListener('visibilitychange', function() {
-    if (document.hidden) pauseTimer();
-    else resumeIfVisible();
+    if (document.hidden) {
+      pauseTimer();
+    } else {
+      if (!viewDone) startTimer();
+    }
   });
-  window.addEventListener('blur',     function() { pauseTimer(); });
-  window.addEventListener('focus',    function() { resumeIfVisible(); });
-  window.addEventListener('pageshow', function() { resumeIfVisible(); });
+
+  window.addEventListener('blur',  function() { pauseTimer(); });
+  window.addEventListener('focus', function() { if (!viewDone) startTimer(); });
 
   /* ── Popup (shows on 25s qualified view OR on lead-already-today) ── */
   window.showPopup  = function() { var p = document.getElementById('lcc-popup'); if (p) { p.style.display = 'flex';  document.body.style.overflow = 'hidden'; }};
@@ -1032,10 +1056,168 @@ html, body{overflow-x:hidden;max-width:100vw}
 
   /* ── Call tracking ── */
   window.trackCall = function(where) {
+    trackEvent('CTA_Call', { location: where });
     if (typeof fbq !== 'undefined') {
       fbq('track', 'Contact', { content_name: 'Phone Call - ' + where, content_category: 'Hair Loss / SMP' });
     }
   };
+
+  /* ═══════════════════════════════════════════════════════════════
+     FUNNEL DIAGNOSTICS — see what visitors actually do
+     Fires events to: FB Pixel (custom) + Google Apps Script + Console
+     Use ?debug=1 in URL to show floating event-log panel for testing
+  ═══════════════════════════════════════════════════════════════ */
+  var DEBUG_MODE = /[\?&]debug=1/.test(location.search);
+  var pageStartTime = Date.now();
+  var eventLog = []; // for debug panel
+  var scrollDepthsHit = {};
+  var timeMilestonesHit = {};
+  var maxScrollPct = 0;
+
+  function trackEvent(name, props) {
+    props = props || {};
+    var ts = Math.round((Date.now() - pageStartTime) / 1000);
+    var entry = { event: name, t: ts, props: props };
+    eventLog.push(entry);
+    console.log('[HT-Event @' + ts + 's]', name, props);
+
+    // 1) Facebook Pixel — custom event
+    if (typeof fbq !== 'undefined') {
+      try { fbq('trackCustom', name, props); } catch(e){}
+    }
+
+    // 2) Google Apps Script — image pixel (no CORS)
+    try {
+      var url = GS_URL + '?action=event'
+        + '&name=' + encodeURIComponent(name)
+        + '&page=' + encodeURIComponent(PAGE_NAME)
+        + '&userId=' + encodeURIComponent(uid)
+        + '&t=' + Date.now()
+        + '&secOnPage=' + ts;
+      Object.keys(props).forEach(function(k){
+        url += '&p_' + encodeURIComponent(k) + '=' + encodeURIComponent(String(props[k]).slice(0,80));
+      });
+      (new Image()).src = url;
+    } catch(e){}
+
+    // 3) Debug panel
+    if (DEBUG_MODE) renderDebugPanel();
+  }
+
+  // ── Scroll depth tracking (25, 50, 75, 100%) ───────────
+  function onScroll() {
+    var docH = Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight
+    );
+    var winH = window.innerHeight;
+    var sY = window.scrollY || document.documentElement.scrollTop;
+    var pct = Math.round(((sY + winH) / docH) * 100);
+    if (pct > maxScrollPct) maxScrollPct = pct;
+    [25, 50, 75, 100].forEach(function(depth){
+      if (pct >= depth && !scrollDepthsHit[depth]) {
+        scrollDepthsHit[depth] = true;
+        trackEvent('Scroll_' + depth + 'pct', { depth: depth, secOnPage: Math.round((Date.now()-pageStartTime)/1000) });
+      }
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ── Time-on-page milestones (10s, 30s, 60s, 120s) ──────
+  [10, 30, 60, 120].forEach(function(sec){
+    setTimeout(function(){
+      if (timeMilestonesHit[sec]) return;
+      timeMilestonesHit[sec] = true;
+      trackEvent('Time_' + sec + 's', { sec: sec, maxScroll: maxScrollPct });
+    }, sec * 1000);
+  });
+
+  // ── CTA click tracking (Photo Assess buttons + form-jump links) ──
+  function wireCTAClicks() {
+    document.querySelectorAll('a[href="#consult-form"]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var location = 'unknown';
+        if (btn.closest('.hero')) location = 'hero';
+        else if (btn.closest('#specialist')) location = 'specialist';
+        else if (btn.closest('.float-group')) location = 'floating';
+        else if (btn.classList.contains('b-link')) location = 'bucket';
+        trackEvent('CTA_PhotoAssess', { location: location });
+      });
+    });
+  }
+
+  // ── Popup interaction tracking ─────────────────────────
+  var _origShowPopup = window.showPopup;
+  window.showPopup = function() {
+    trackEvent('Popup_Shown', {});
+    if (typeof _origShowPopup === 'function') _origShowPopup();
+  };
+  var _origClosePopup = window.closePopup;
+  window.closePopup = function() {
+    trackEvent('Popup_Dismissed', { timeOnPage: Math.round((Date.now()-pageStartTime)/1000) });
+    if (typeof _origClosePopup === 'function') _origClosePopup();
+  };
+
+  // ── Form field interaction tracking ────────────────────
+  function wireFormTracking() {
+    ['f-name', 'f-phone', 'f-email', 'f-location'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el) return;
+      var fieldName = id.replace('f-', '');
+      var focused = false;
+      el.addEventListener('focus', function(){
+        if (!focused) {
+          focused = true;
+          trackEvent('Form_FieldStart', { field: fieldName });
+        }
+      });
+      el.addEventListener('blur', function(){
+        var val = (el.value || '').trim();
+        if (val) trackEvent('Form_FieldComplete', { field: fieldName, length: val.length });
+      });
+    });
+  }
+
+  // ── Page exit (time + max scroll) — sendBeacon for reliability ──
+  function trackPageExit() {
+    var timeSpent = Math.round((Date.now() - pageStartTime) / 1000);
+    try {
+      var url = GS_URL + '?action=event'
+        + '&name=Page_Exit'
+        + '&page=' + encodeURIComponent(PAGE_NAME)
+        + '&userId=' + encodeURIComponent(uid)
+        + '&t=' + Date.now()
+        + '&p_secOnPage=' + timeSpent
+        + '&p_maxScroll=' + maxScrollPct
+        + '&p_eventsFired=' + eventLog.length;
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(url);
+      } else {
+        (new Image()).src = url;
+      }
+    } catch(e){}
+  }
+  window.addEventListener('pagehide', trackPageExit);
+  window.addEventListener('beforeunload', trackPageExit);
+
+  // ── DEBUG PANEL (only if ?debug=1) ─────────────────────
+  function renderDebugPanel() {
+    var panel = document.getElementById('ht-debug');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.id = 'ht-debug';
+      panel.style.cssText = 'position:fixed;bottom:10px;left:10px;width:300px;max-height:60vh;overflow:auto;background:rgba(0,0,0,.92);color:#0f0;font:11px/1.4 monospace;padding:10px;border-radius:6px;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,.5)';
+      panel.innerHTML = '<div style="color:#fff;font-weight:bold;border-bottom:1px solid #333;padding-bottom:4px;margin-bottom:6px">🔍 HT Event Log <span style="float:right;cursor:pointer;color:#888" onclick="this.parentNode.parentNode.style.display=\'none\'">✕</span></div><div id="ht-debug-body"></div>';
+      document.body.appendChild(panel);
+    }
+    var body = document.getElementById('ht-debug-body');
+    if (body) {
+      body.innerHTML = eventLog.slice(-25).reverse().map(function(e){
+        var propsStr = Object.keys(e.props).length ? ' ' + JSON.stringify(e.props) : '';
+        return '<div style="margin-bottom:3px"><span style="color:#888">@' + e.t + 's</span> <span style="color:#0f0">' + e.event + '</span><span style="color:#aaa">' + propsStr + '</span></div>';
+      }).join('');
+    }
+  }
 
   /* ── Legal modal toggles ── */
   window.openPrivacy  = function(){ var m=document.getElementById('privacy-modal'); if(m){m.style.display='flex';document.body.style.overflow='hidden';} };
@@ -1172,10 +1354,13 @@ html, body{overflow-x:hidden;max-width:100vw}
     var n   = (document.getElementById('f-name')     || {}).value || '';
     var loc = (document.getElementById('f-location') || {}).value || '';
 
+    trackEvent('Form_SubmitAttempted', { hasName: !!n.trim(), hasLocation: !!loc });
+
     // Name required
     if (!n.trim()) {
       var nameInput = document.getElementById('f-name');
       if (nameInput) { nameInput.classList.add('invalid'); nameInput.focus(); }
+      trackEvent('Form_ValidationFailed', { reason: 'name_missing' });
       alert('Please fill in your name.');
       return;
     }
@@ -1184,16 +1369,19 @@ html, body{overflow-x:hidden;max-width:100vw}
     var phoneE164 = validatePhone();
     if (!phoneE164) {
       var pi = document.getElementById('f-phone'); if (pi) pi.focus();
-      return; // error message shown inline by validatePhone
+      trackEvent('Form_ValidationFailed', { reason: 'phone_invalid' });
+      return;
     }
 
     // Email optional but must be valid format if filled
     var emailVal = validateEmail();
     if (emailVal === null) {
       var ei = document.getElementById('f-email'); if (ei) ei.focus();
-      return; // error message shown inline
+      trackEvent('Form_ValidationFailed', { reason: 'email_invalid' });
+      return;
     }
 
+    trackEvent('Form_Submitted', { country: DETECTED_COUNTRY, hasEmail: !!emailVal, hasLocation: !!loc });
     var btn = document.querySelector('.form-submit');
     if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
 
@@ -1275,6 +1463,15 @@ html, body{overflow-x:hidden;max-width:100vw}
     wirePhoneInput();
     wireEmailInput();
     detectCountry();
+
+    // Wire funnel tracking
+    wireCTAClicks();
+    wireFormTracking();
+    trackEvent('Page_Loaded', {
+      utm: utmSource(),
+      referrer: (document.referrer || 'direct').slice(0, 100),
+      viewport: window.innerWidth + 'x' + window.innerHeight
+    });
 
     checkStatus(function(status) {
       if (status === 'paused') {
